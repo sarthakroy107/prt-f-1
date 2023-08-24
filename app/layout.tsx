@@ -3,8 +3,13 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import {sidebar_options} from '@/constants/sidebar'
 import Link from 'next/link'
+import Image from 'next/image'
+import {AiFillHome} from 'react-icons/ai'
+import { IconType } from 'react-icons'
 
 const inter = Inter({ subsets: ['latin'] })
+
+const image = "https://pbs.twimg.com/profile_images/1658306244577472513/up-Oc-FT_400x400.jpg"
 
 console.log(sidebar_options)
 export const metadata: Metadata = {
@@ -20,14 +25,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className='w-full flex justify-center'>
-        <div className='lg:w-2/3 flex'>
-          <div className='w-[20%]'>
+        <div className='lg:w-2/3 flex p-2 py-5'>
+          <div className='w-[20%] py-7 flex flex-col text-xl font-semibold opacity-90 gap-3'>
+            <Image className='rounded-full'
+            src={image}
+            width={69}
+            height={69}
+            alt='Image'
+            />
             {
-              sidebar_options.map((op, index)=>(
-                <div key={index}>
-                  <Link href={op.route}>{op.name}</Link>
+              sidebar_options.map((op, index) => {
+                const IconComponent: IconType = op.icon
+                return (
+                  <div key={index}>
+
+                  <Link href={op.route}>
+                    <IconComponent/>
+                    {op.name}
+                  </Link>
                 </div>
-              ))
+                )
+              })
             }
           </div>
           <div className='w-[50%]'>
