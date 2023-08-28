@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
 import User from "@/mongoose_models/User";
 import bcrypt from 'bcrypt';
-import connect from "@/mongoose_models/config/db";
+import connect from "@/mongoose_models/config/mongo.config";
 
 connect();
 
