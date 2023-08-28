@@ -9,6 +9,7 @@ import { IconType } from 'react-icons'
 import ReduxProvider from '@/redux/provider'
 import NextAuthProviders from './_lib/nextAuthProvider/provider'
 import SidebarLayout from '@/components/page-components/SidebarLayout'
+import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,14 +34,7 @@ export default function RootLayout({
       <body className='w-full flex justify-center'>
         <NextAuthProviders>
           <ReduxProvider>
-            <div className='lg:w-2/3 flex p-2 py-5'>
-              <div className='w-[20%] py-7 flex flex-col text-xl font-semibold opacity-90 gap-3'>
-                <SidebarLayout/>
-              </div>
-              <div className='w-[50%] border border-white'>
-                {children}
-              </div>
-            </div>
+            {children}
           </ReduxProvider>
         </NextAuthProviders>
       </body>

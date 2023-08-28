@@ -6,15 +6,15 @@ const page = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data: session } = useSession();
   
-  if(session && session.user) {
-    return (
-      <div>USer signed in</div>
-    )
-  }
+  // if(session && session.user) {
+  //   return (
+  //     <div>User signed in</div>
+  //   )
+  // }
   
   return (
     <main className='w-full h-screen'>
-      sfjoosfufbnvou
+      
     </main>
   )
 }
