@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className='w-full flex justify-center'>
+      <body className='w-full min-h-screen flex justify-center items-center'>
         <NextAuthProviders>
           <ReduxProvider>
             {children}
