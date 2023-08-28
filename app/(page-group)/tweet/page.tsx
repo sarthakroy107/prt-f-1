@@ -1,4 +1,4 @@
-import { getClient } from "../_lib/client";
+import { getClient } from "../../_lib/client";
 
 import { gql } from "@apollo/client";
 

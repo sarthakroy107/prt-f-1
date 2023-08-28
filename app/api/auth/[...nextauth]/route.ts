@@ -9,7 +9,7 @@ import connect from "@/mongoose_models/config/db";
 connect();
 
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
+  
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
@@ -33,12 +33,9 @@ export const authOptions: NextAuthOptions = {
           if(await bcrypt.compare(credentials?.password as string, user?.password)) {
             return user
           }
-
           return null
         }
       })
-
-    // ...add more providers here
   ],
 }
 const handler = NextAuth(authOptions)

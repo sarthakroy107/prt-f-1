@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {AiFillHome} from 'react-icons/ai'
 import { IconType } from 'react-icons'
+import ReduxProvider from '@/redux/provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,32 +30,34 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className='w-full flex justify-center'>
-        <div className='lg:w-2/3 flex p-2 py-5'>
-          <div className='w-[20%] py-7 flex flex-col text-xl font-semibold opacity-90 gap-3'>
-            <Image className='rounded-full'
-            src={image}
-            width={69}
-            height={69}
-            alt='Image'
-            />
-            {
-              sidebar_options.map((op, index) => {
-                const IconComponent: IconType = op.icon
-                return (
-                  <div key={index}>
-                  <Link href={op.route} className='w-fit flex gap-3 p-3 px-5 rounded-full backdrop-blur-sm  hover:bg-slate-300/25'>
-                    <IconComponent className='relative top-1'/>
-                    {op.name}
-                  </Link>
-                </div>
-                )
-              })
-            }
+        <ReduxProvider>
+          <div className='lg:w-2/3 flex p-2 py-5'>
+            <div className='w-[20%] py-7 flex flex-col text-xl font-semibold opacity-90 gap-3'>
+              <Image className='rounded-full'
+              src={image}
+              width={69}
+              height={69}
+              alt='Image'
+              />
+              {
+                sidebar_options.map((op, index) => {
+                  const IconComponent: IconType = op.icon
+                  return (
+                    <div key={index}>
+                    <Link href={op.route} className='w-fit flex gap-3 p-3 px-5 rounded-full backdrop-blur-sm  hover:bg-slate-300/25'>
+                      <IconComponent className='relative top-1'/>
+                      {op.name}
+                    </Link>
+                  </div>
+                  )
+                })
+              }
+            </div>
+            <div className='w-[50%] border border-white'>
+              {children}
+            </div>
           </div>
-          <div className='w-[50%] border border-white'>
-            {children}
-          </div>
-        </div>
+        </ReduxProvider>
       </body>
     </html>
   )
