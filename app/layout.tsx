@@ -1,15 +1,11 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import {sidebar_options} from '@/constants/sidebar'
-import Link from 'next/link'
-import Image from 'next/image'
 import {AiFillHome} from 'react-icons/ai'
 import { IconType } from 'react-icons'
 import ReduxProvider from '@/redux/provider'
 import NextAuthProviders from './_lib/nextAuthProvider/provider'
-import SidebarLayout from '@/components/page-components/SidebarLayout'
-import { usePathname } from 'next/navigation'
+import { ApolloWrapper } from '@/lib/graphql/apollo-wrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,11 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className='w-full min-h-screen flex justify-center items-center'>
-        <NextAuthProviders>
-          <ReduxProvider>
-            {children}
-          </ReduxProvider>
-        </NextAuthProviders>
+        <ApolloWrapper>
+          <NextAuthProviders>
+            <ReduxProvider>
+              {children}
+            </ReduxProvider>
+          </NextAuthProviders>
+        </ApolloWrapper>
       </body>
     </html>
   )
