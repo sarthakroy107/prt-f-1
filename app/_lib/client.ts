@@ -1,4 +1,4 @@
-import { HttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, gql } from '@apollo/client';
 import {
   NextSSRInMemoryCache,
   NextSSRApolloClient,

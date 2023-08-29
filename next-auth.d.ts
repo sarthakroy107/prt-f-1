@@ -7,6 +7,7 @@ declare module 'next-auth' {
             profileImageUrl: string;
             bio: string;
             blue: boolean;
+            token: string;
         } & Session['user']
     }
 }
