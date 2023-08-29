@@ -1,14 +1,12 @@
-"use client"
+'use client'
+import { data } from "autoprefixer";
+import { getServerSession } from "next-auth";
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 
 const page = () => {
   const {data: session} = useSession();
-  if(session && session.user) {
-    return (
-      <main>{session.user.email}</main>
-    )
-  }
+  console.log(session);
   return (
     <main className="w-full">
         <div className="w-full py-2 sticky top-0 bg-black/30 backdrop-blur-md">
