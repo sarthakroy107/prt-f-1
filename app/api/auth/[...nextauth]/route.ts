@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import NextAuth, { NextAuthOptions } from "next-auth"
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -5,8 +6,29 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import User from "@/mongoose_models/User";
 import bcrypt from 'bcrypt';
 import connect from "@/mongoose_models/config/mongo.config";
+import { gql } from "@apollo/client";
+import { getClient } from "@/lib/graphql/client";
+import { Query } from "mongoose";
+
 
 connect();
+
+const query = gql`
+  query {
+    userLogin(email: "sarthakroy107@gmail.com", password: "1234") {
+      _id
+      bio
+      blue
+      createdAt
+      email
+      name
+      profileImageUrl
+      token
+      updatedAt
+    }
+  }
+
+`
 
 export const authOptions: NextAuthOptions = {
 
@@ -28,6 +50,14 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         console.log("BEFORE USER VERIFICATION")
+
+        const e = "sarthakroy107@gmail.com"
+        const p = "1234"
+        console.log("before useSuspenseQuery")
+        const { data } = await getClient().query({query})
+        console.log("After client")
+        console.log(data.userLogin);
+
         const user = await User.findOne({ email: credentials?.email })
         //console.log(user)
         if (await bcrypt.compare(credentials?.password as string, user?.password)) {
@@ -38,38 +68,11 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   secret: process.env.SECRET,
-  // jwt: {
-  //   secret: process.env.NEXT_AUTH_JWT_SECRET
-  // },
+
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60 // 30 days
   },
-  // callbacks: {
-  //   async session({ session, token }) {
-      
-  //     session.user.id = token.id
-  //     const dbAccount = await User.findById(session.user.id);
-  //     session.user.profileImageUrl = dbAccount.profileImageUrl;
-  //     session.user.bio = dbAccount.bio;
-  //     session.user.blue = dbAccount.blue;
-  //     session.user.token = token.accessToken
-
-  //     //console.log(session.user)
-      
-  //     return session
-  //   },
-  //   async jwt({ token, account, user }) {
-  //     // Persist the OAuth access_token and or the user id to the token right after signin
-  //     console.log("Account: ", account)
-  //     if (account) {
-  //       token.accessToken = account.access_token
-  //       console.log("Access token", token.accessToken)
-  //       token.id = user.id
-  //     }
-  //     return token
-  //   }
-  // },
   callbacks: {
     async jwt({ token, user }) {
       
