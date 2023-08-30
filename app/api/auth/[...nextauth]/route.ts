@@ -8,14 +8,14 @@ import bcrypt from 'bcrypt';
 import connect from "@/mongoose_models/config/mongo.config";
 import { gql } from "@apollo/client";
 import { getClient } from "@/lib/graphql/client";
-import { Query } from "mongoose";
+import { useUserLoginGQLServer } from "@/lib/graphql/hooks/userLogingql";
 
 
 connect();
 
 const query = gql`
-  query {
-    userLogin(email: "sarthakroy107@gmail.com", password: "1234") {
+  query Query($email: String!, $password: String!) {
+    userLogin(email: $email, password: $password) {
       _id
       bio
       blue
@@ -25,9 +25,9 @@ const query = gql`
       profileImageUrl
       token
       updatedAt
+      password
     }
   }
-
 `
 
 export const authOptions: NextAuthOptions = {
@@ -50,15 +50,12 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         console.log("BEFORE USER VERIFICATION")
+        
 
-        const e = "sarthakroy107@gmail.com"
-        const p = "1234"
-        console.log("before useSuspenseQuery")
-        const { data } = await getClient().query({query})
-        console.log("After client")
-        console.log(data.userLogin);
-
-        const user = await User.findOne({ email: credentials?.email })
+        const {data} = await useUserLoginGQLServer(credentials?.email as string, credentials?.password as string)
+        console.log(data.userLogin)
+        //const user = await User.findOne({ email: credentials?.email })
+        const user = data.userLogin;
         //console.log(user)
         if (await bcrypt.compare(credentials?.password as string, user?.password)) {
           return user
