@@ -3,32 +3,12 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
-import User from "@/mongoose_models/User";
 import bcrypt from 'bcrypt';
-import connect from "@/mongoose_models/config/mongo.config";
 import { gql } from "@apollo/client";
-import { getClient } from "@/lib/graphql/client";
 import { useUserLoginGQLServer } from "@/lib/graphql/hooks/userLogingql";
+import axios from "axios";
+import { useAuthenticatedLogin } from "@/lib/graphql/hooks/useAuthenticatedLogin";
 
-
-connect();
-
-const query = gql`
-  query Query($email: String!, $password: String!) {
-    userLogin(email: $email, password: $password) {
-      _id
-      bio
-      blue
-      createdAt
-      email
-      name
-      profileImageUrl
-      token
-      updatedAt
-      password
-    }
-  }
-`
 
 export const authOptions: NextAuthOptions = {
 
@@ -53,10 +33,18 @@ export const authOptions: NextAuthOptions = {
         
 
         const {data} = await useUserLoginGQLServer(credentials?.email as string, credentials?.password as string)
-        console.log(data.userLogin)
-        //const user = await User.findOne({ email: credentials?.email })
+        const userData = await axios({
+          method:'post',
+          url:'http://localhost:8000/api/v1/login',
+          data: {
+            email: credentials?.email,
+            password: credentials?.password
+          }
+        })
+        console.log(userData)
+        
         const user = data.userLogin;
-        //console.log(user)
+        
         if (await bcrypt.compare(credentials?.password as string, user?.password)) {
           return user
         }
@@ -76,9 +64,32 @@ export const authOptions: NextAuthOptions = {
       return {...token, ...user};
     },
     async session({ session, token, user }) {
-      session.user.token = token;
+      session.user.token = token.token;
+      session.user.bio = token.bio;
+      session.user.profileImageUrl = token.profileImageUrl;
       return session;
     },
+    async signIn({user, account, profile, email, credentials}) {
+      console.log("BEFORE USER VERIFICATION")
+        
+      if(account?.provider === 'google') {
+        // console.log(user?.email)
+        const hello = await useAuthenticatedLogin(user?.email!)
+        console.log(hello)
+      }
+        
+      // console.log("User: ", user);
+      // console.log("Account: ", account);
+      // console.log("Profile", profile);
+      // console.log("Email: ", email);
+      // console.log("Credentials", credentials);
+      // console.log("User: ", user);
+      // console.log("Account: ", account);
+      // console.log("Profile", profile);
+      // console.log("Email: ", email);
+      // console.log("Credentials", credentials);
+      return true
+    }
   },
 
 }

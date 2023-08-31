@@ -22,7 +22,7 @@ export const useUserLoginGQLServer = async (email: string, password: string) => 
     const {data, errors} = await getClient().query({
         query, 
         variables:{
-            email, password
+          email, password
         }
     })
     return {

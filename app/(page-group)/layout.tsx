@@ -9,7 +9,7 @@ export default function Layout ({ children }: {children: React.ReactNode}) {
             `}>
               <SidebarLayout/>
             </div>
-            <div className='w-[50%] border border-white'>
+            <div className='w-[50%] min-h-screen border border-white'>
               {children}
             </div>
         </main>

@@ -1,27 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-"use client";
+"use client"
 
-export const dynamic = "force-dynamic";
+import { useSession } from "next-auth/react"
 
-import { gql } from "@apollo/client";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+const page = () => {
+  const {data: session, status} = useSession()
 
-const query = gql`
-  query {
-  fetchUsers {
-    _id
-    bio
-    blue
-    createdAt
-    email
-    name
-    token
-  }
+  return (
+    <div>{JSON.stringify(session)}  {status}</div>
+  )
 }
-`
 
-export default function PollPage() {
-  const { data } = useSuspenseQuery(query);
-
-  return <div>{JSON.stringify(data)}</div>;
-};
+export default page

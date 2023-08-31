@@ -8,6 +8,9 @@ declare module 'next-auth' {
             bio: string;
             blue: boolean;
             token: string;
+            createdAt: string;
+            bannerUrl: string;
+            bio: string
         } & Session['user']
     }
 }
