@@ -5,7 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {AiFillHome} from 'react-icons/ai'
 import { IconType } from 'react-icons'
-import ReduxProvider from '@/redux/provider'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 const SidebarLayout = () => {
