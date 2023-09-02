@@ -5,11 +5,13 @@
 import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ZodType, z } from 'zod';
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import UsernameCheck from '@/components/buttons/UsernameCheck';
+import {FcGoogle} from 'react-icons/fc'
+import {FaGithub} from "react-icons/fa"
 export const dynamic = "force-dynamic";
 
 type AuthObjFields = {
@@ -43,8 +45,9 @@ export default function Page() {
   const { register, handleSubmit, getValues, watch } = useForm<formData>({resolver: zodResolver(schema)})
   
   const {data: session} = useSession();
-  const [authObj, setAuthObj] = useState<AuthObjFields>({ email:"", password: "" , username: ""})
-  const [usernameDetail, setUsernameDetail] = useState<string>("")
+  const [authObj, setAuthObj] = useState<AuthObjFields>({ email:"", password: "" , username: ""});
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean>(false);
+
 
 
 
@@ -72,12 +75,15 @@ export default function Page() {
 
   const getUsername = watch("username")
 
-
+  useEffect(()=>{
+    console.log(usernameAvailable)
+  }, [usernameAvailable])
   
   return (
     <section className=''>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 items-center">
-        <div className="relative h-5/6 flex items-end px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24 bg-gradient-to-t from-black to-white/80 rounded-md">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 items-center max-h-screen">
+        <div className="relative h-5/6 flex items-end px-4 pb-10 pt-60 sm:px-6 
+        sm:pb-12 md:justify-center lg:px-8 lg:pb-10 bg-gradient-to-t from-black to-white/80 rounded-md">
           <div className="absolute inset-0  m-1 p-1">
             <Image
                 width={400}
@@ -166,8 +172,8 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <div className="p-6 px-6 lg:p-12 lg:px-16 border border-white/60 rounded-md w-[75%]">
+        <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-12 max-h-screen">
+          <div className="p-6 px-6 lg:p-12 lg:px-16 border border-white/60 rounded-md lg:w-[75%]">
             <h2 className="text-3xl font-bold leading-tight sm:text-4xl">Sign up</h2>
             <p className="mt-2 text-base text-gray-200">
               Already have an account?{' '}
@@ -181,74 +187,56 @@ export default function Page() {
             </p>
             <form onSubmit={handleSubmit(submitHandler)}
             action="#" method="POST" className="mt-8">
-              <div className='flex flex-col gap-1 px-5 p-3 bg-slate-200/10 backdrop-blur-lg duration-150
-              rounded-md border border-transparent hover:border-white/20'>
+              <div className={`flex flex-col gap-1 lg:px-5 p-3 backdrop-blur-lg ${usernameAvailable ? "bg-green-500/30" : "bg-slate-200/10"}
+              rounded-md border border-transparent hover:border-white/20 transition-all duration-100`}>
                 <label className='text-sm opacity-90'>Username</label>
                 <div className='flex items-center gap-2'>
-                  <input className='w-[75%] bg-black/75 border border-white/20 p-2 rounded-md my-1'
+                  <input className='w-[75%] bg-black/75 border border-white/20 p-2 rounded-md lg:my-1'
                   type="text" placeholder='ex: @username' {...register("username", { required: true })} />
-                  <UsernameCheck username={getUsername} />
+                  <UsernameCheck username={getUsername} setValue={setUsernameAvailable}/>
                 </div>
               </div>
               <div className='border-b border-white/20 scale-105 my-4'></div>
               <div className = "flex flex-col my-1">
-                <label className='text-sm opacity-70'>Name</label>
+                <label className='hidden lg:block text-sm opacity-70'>Name</label>
                 <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1' 
                 type="text" placeholder='Name' {...register("name")} />
               </div>
               <div className = "flex flex-col my-1">
-                <label className='text-sm opacity-70'>Email</label>
+                <label className='hidden lg:block text-sm opacity-70'>Email</label>
                 <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1' 
                 type="text" placeholder='Email' {...register("email")} />
               </div>
-              <div className='flex flex-col lg:flex-row gap-4'>
-                <div className = "flex flex-col my-1 w-1/2">
-                  <label className='text-sm opacity-70'>Password</label>
+              <div className='flex flex-col lg:flex-row gap-1 mb-3 lg:gap-4'>
+                <div className = "flex flex-col lg:w-1/2">
+                  <label className='hidden lg:block text-sm opacity-70'>Password</label>
                   <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1' 
                   type="text" placeholder='Password' {...register("password")} />
                 </div>
-                <div className = "flex flex-col my-1 w-1/2">
-                  <label className='text-sm opacity-70'>Confirm password</label>
+                <div className = "flex flex-col lg:w-1/2">
+                  <label className='hidden lg:block text-sm opacity-70'>Confirm password</label>
                   <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
                   type="text" placeholder='Confirm password' {...register("confirmPassword")}/>
                 </div>
               </div>
-              <div className='flex justify-center border border-white/50 text-white/80 p-2 rounded-md'>
-                  <input type="submit"/>
-                </div>
-            </form>
-            <div className="mt-3 space-y-3">
-              <button onClick={handleGooglelogIn}
-                type="button"
-                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
-              >
-                <span className="mr-2 inline-block">
-                  <svg
-                    className="h-6 w-6 text-rose-500"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
-                  </svg>
-                </span>
-                Sign up with Google
+              <button disabled={!usernameAvailable} className={`flex justify-center transition-all duration-200 ${usernameAvailable ? "opacity-100" : "opacity-30"}
+              border border-white/50 text-white/80 p-2 rounded-md w-full`}>
+                <input type="submit"/>
               </button>
-              <button onClick={handleGithublogIn}
-                type="button"
-                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
-              >
-                <span className="mr-2 inline-block">
-                  <svg
-                    className="h-6 w-6 text-[#2563EB]"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
-                  </svg>
-                </span>
-                Sign up with Github
+            </form>
+            <div className='flex justify-center items-center gap-1 my-1'>
+              <div className='border-b w-[45%] border-white/30'></div>
+              <div className= "opacity-75">Or</div>
+              <div className='border-b w-[45%] border-white/30'></div>
+            </div>
+            <div className="mt-3 flex justify-center gap-4 items-center">
+              <button disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 p-1 px-2 rounded-full transition-all duration-200
+              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100": "opacity-30"}`}>
+                <FcGoogle className=""/>Google
+              </button>
+              <button disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 px-2 rounded-full transition-all duration-200
+              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100": "opacity-30"}`}>
+                <FaGithub className=""/>Github
               </button>
             </div>
           </div>

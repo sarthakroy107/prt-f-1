@@ -1,16 +1,17 @@
 "use client"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { SetStateAction, useEffect, useState,Dispatch } from "react"
 import { TailSpin } from "react-loader-spinner"
 import {VscError, VscCheck} from 'react-icons/vsc'
 
-const UsernameCheck = ({username}: {username: string}) => {
+const UsernameCheck = ({username, setValue}: {username: string, setValue: Dispatch<SetStateAction<boolean>>}) => {
   console.log(username)
   const [currentState, setCurrentState] = useState<boolean | null>(null);
   const [loading, setLoadiing] = useState<boolean>(false)
 
   useEffect(()=> {
     setCurrentState(null)
+    setValue(false)
   }, [username])
 
   const handleAvailibilityCheck = async (e: any) => {
@@ -27,6 +28,7 @@ const UsernameCheck = ({username}: {username: string}) => {
     setCurrentState(res.data.data)
     console.log(res.data.data)
     setLoadiing(false)
+    setValue(res.data.data)
   }
 
   if(loading) {
@@ -47,7 +49,7 @@ const UsernameCheck = ({username}: {username: string}) => {
   }
 
   return (
-    <button className={`border border-white p-2 px-3 rounded-md`}
+    <button disabled={username === undefined ||username.length === 0} className={`border border-white p-2 px-3 rounded-md ${username === undefined || username.length === 0 ? "opacity-50" : "opacity-100"}`}
     onClick={handleAvailibilityCheck}>
       {
         currentState === null ? "Check" : currentState === true ? (<VscCheck className="text-xl mx-2 text-green-500"/>) 
