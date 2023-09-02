@@ -48,7 +48,7 @@ export default function Page() {
                 width={400}
                 height={400}
               className="h-full w-full rounded-md object-cover object-top"
-              src="https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c2lnbnVwfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60"
+              src="https://c4.wallpaperflare.com/wallpaper/189/710/393/otonari-no-tenshi-sama-shiina-mahiru-anime-girls-ai-art-blonde-hd-wallpaper-preview.jpg"
               alt=""
             />
           </div>

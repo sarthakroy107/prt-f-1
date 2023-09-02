@@ -10,13 +10,19 @@ const nextConfig = {
           },
           {
             protocol: 'https',
-            hostname: 'images.unsplash.com',
+            hostname: 'res.cloudinary.com',
             port: '',
             pathname: '/**',
           },
           {
             protocol: 'https',
-            hostname: 'pbs.twimg.com',
+            hostname: 'c4.wallpaperflare.com',
+            port: '',
+            pathname: '/**'
+          },
+          {
+            protocol: 'https',
+            hostname: 'images.unsplash.com',
             port: '',
             pathname: '/**'
           }
