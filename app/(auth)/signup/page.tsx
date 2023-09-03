@@ -5,13 +5,14 @@
 import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ZodType, z } from 'zod';
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import UsernameCheck from '@/components/buttons/UsernameCheck';
-import {FcGoogle} from 'react-icons/fc'
-import {FaGithub} from "react-icons/fa"
+import { FcGoogle } from 'react-icons/fc'
+import { FaGithub } from "react-icons/fa"
+import { useCookies } from 'next-client-cookies';
 export const dynamic = "force-dynamic";
 
 type AuthObjFields = {
@@ -35,35 +36,45 @@ export default function Page() {
     email: z.string().email(),
     password: z.string().min(6).max(20),
     confirmPassword: z.string().min(6).max(20),
-    
-    
-  }).refine((data)=> data.password === data.confirmPassword, {
+
+
+  }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"]
   });
-  
-  const { register, handleSubmit, getValues, watch } = useForm<formData>({resolver: zodResolver(schema)})
-  
-  const {data: session} = useSession();
-  const [authObj, setAuthObj] = useState<AuthObjFields>({ email:"", password: "" , username: ""});
+
+  const { register, handleSubmit, getValues, watch } = useForm<formData>({ resolver: zodResolver(schema) })
+
+  const { data: session } = useSession();
+  const [authObj, setAuthObj] = useState<AuthObjFields>({ email: "", password: "", username: "" });
   const [usernameAvailable, setUsernameAvailable] = useState<boolean>(false);
+  const getUsername = watch("username")
 
-
-
+  const handleCredentialLogIn = () => {
+    signIn("credentials", {
+      email: authObj.email,
+      password: authObj.password,
+      callbackUrl: '/',
+      redirect: true
+    }
+    )
+  }
+  const cookies = useCookies();
 
   const handleGooglelogIn = () => {
-    signIn("google",{
-      callbackUrl:'/',
-      redirect: true,
-      username: authObj.username
+    cookies.set('username', getUsername)
+    signIn("google", {
+        callbackUrl: '/profile',
+        redirect: true,
       }
     )
   }
 
   const handleGithublogIn = () => {
-    signIn("github",{
-      callbackUrl:'/',
-      redirect: true
+    cookies.set('username', getUsername)
+    signIn("github", {
+        callbackUrl: '/profile',
+        redirect: true,
       }
     )
   }
@@ -73,12 +84,11 @@ export default function Page() {
     console.log(getValues("username"))
   }
 
-  const getUsername = watch("username")
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(usernameAvailable)
   }, [usernameAvailable])
-  
+
   return (
     <section className=''>
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 items-center max-h-screen">
@@ -86,8 +96,8 @@ export default function Page() {
         sm:pb-12 md:justify-center lg:px-8 lg:pb-10 bg-gradient-to-t from-black to-white/80 rounded-md">
           <div className="absolute inset-0  m-1 p-1">
             <Image
-                width={400}
-                height={400}
+              width={400}
+              height={400}
               className="h-full w-full rounded-md object-cover object-top"
               src="https://c4.wallpaperflare.com/wallpaper/189/710/393/otonari-no-tenshi-sama-shiina-mahiru-anime-girls-ai-art-blonde-hd-wallpaper-preview.jpg"
               alt=""
@@ -186,57 +196,57 @@ export default function Page() {
               </a>
             </p>
             <form onSubmit={handleSubmit(submitHandler)}
-            action="#" method="POST" className="mt-8">
+              action="#" method="POST" className="mt-8">
               <div className={`flex flex-col gap-1 lg:px-5 p-3 backdrop-blur-lg ${usernameAvailable ? "bg-green-500/30" : "bg-slate-200/10"}
               rounded-md border border-transparent hover:border-white/20 transition-all duration-100`}>
                 <label className='text-sm opacity-90'>Username</label>
                 <div className='flex items-center gap-2'>
                   <input className='w-[75%] bg-black/75 border border-white/20 p-2 rounded-md lg:my-1'
-                  type="text" placeholder='ex: @username' {...register("username", { required: true })} />
-                  <UsernameCheck username={getUsername} setValue={setUsernameAvailable}/>
+                    type="text" placeholder='ex: @username' {...register("username", { required: true })} />
+                  <UsernameCheck username={getUsername} setValue={setUsernameAvailable} />
                 </div>
               </div>
               <div className='border-b border-white/20 scale-105 my-4'></div>
-              <div className = "flex flex-col my-1">
+              <div className="flex flex-col my-1">
                 <label className='hidden lg:block text-sm opacity-70'>Name</label>
-                <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1' 
-                type="text" placeholder='Name' {...register("name")} />
+                <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
+                  type="text" placeholder='Name' {...register("name")} />
               </div>
-              <div className = "flex flex-col my-1">
+              <div className="flex flex-col my-1">
                 <label className='hidden lg:block text-sm opacity-70'>Email</label>
-                <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1' 
-                type="text" placeholder='Email' {...register("email")} />
+                <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
+                  type="text" placeholder='Email' {...register("email")} />
               </div>
               <div className='flex flex-col lg:flex-row gap-1 mb-3 lg:gap-4'>
-                <div className = "flex flex-col lg:w-1/2">
+                <div className="flex flex-col lg:w-1/2">
                   <label className='hidden lg:block text-sm opacity-70'>Password</label>
-                  <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1' 
-                  type="text" placeholder='Password' {...register("password")} />
+                  <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
+                    type="text" placeholder='Password' {...register("password")} />
                 </div>
-                <div className = "flex flex-col lg:w-1/2">
+                <div className="flex flex-col lg:w-1/2">
                   <label className='hidden lg:block text-sm opacity-70'>Confirm password</label>
                   <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
-                  type="text" placeholder='Confirm password' {...register("confirmPassword")}/>
+                    type="text" placeholder='Confirm password' {...register("confirmPassword")} />
                 </div>
               </div>
               <button disabled={!usernameAvailable} className={`flex justify-center transition-all duration-200 ${usernameAvailable ? "opacity-100" : "opacity-30"}
               border border-white/50 text-white/80 p-2 rounded-md w-full`}>
-                <input type="submit"/>
+                <input type="submit" />
               </button>
             </form>
             <div className='flex justify-center items-center gap-1 my-1'>
               <div className='border-b w-[45%] border-white/30'></div>
-              <div className= "opacity-75">Or</div>
+              <div className="opacity-75">Or</div>
               <div className='border-b w-[45%] border-white/30'></div>
             </div>
             <div className="mt-3 flex justify-center gap-4 items-center">
-              <button disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 p-1 px-2 rounded-full transition-all duration-200
-              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100": "opacity-30"}`}>
-                <FcGoogle className=""/>Google
+              <button onClick={handleGooglelogIn} disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 p-1 px-2 rounded-full transition-all duration-200
+              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
+                <FcGoogle className="" /><p className='hidden md:block'>Google</p>
               </button>
-              <button disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 px-2 rounded-full transition-all duration-200
-              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100": "opacity-30"}`}>
-                <FaGithub className=""/>Github
+              <button onClick={handleGithublogIn} disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 px-2 rounded-full transition-all duration-200
+              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
+                <FaGithub className="" /><p className='hidden md:block'>Github</p>
               </button>
             </div>
           </div>

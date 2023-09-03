@@ -6,6 +6,8 @@ import { IconType } from 'react-icons'
 import ReduxProvider from '@/redux/provider'
 import NextAuthProviders from './_lib/nextAuthProvider/provider'
 import { ApolloWrapper } from '@/lib/graphql/apollo-wrapper'
+import { ClientCookiesProvider } from './_lib/client-cookie-provider/provider'
+import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,7 +33,9 @@ export default function RootLayout({
         <ApolloWrapper>
           <NextAuthProviders>
             <ReduxProvider>
-              {children}
+              <ClientCookiesProvider value={cookies().getAll()}>
+                {children}
+              </ClientCookiesProvider>
             </ReduxProvider>
           </NextAuthProviders>
         </ApolloWrapper>

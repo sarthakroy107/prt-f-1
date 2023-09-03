@@ -3,12 +3,12 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from 'bcrypt';
-import { gql } from "@apollo/client";
 import { useUserLoginGQLServer } from "@/lib/graphql/hooks/userLogingql";
-import axios from "axios";
 import { useAuthenticatedLogin } from "@/lib/graphql/hooks/useAuthenticatedLogin";
 import { useCredentialRegister } from "@/lib/graphql/hooks/useCredentialRegister";
+import { getCookies } from 'next-client-cookies/server';
+import { useAmp } from "next/amp";
+import { useAuthenticatedProviderRegister } from "@/lib/graphql/hooks/useAuthenticatedProviderRegister";
 
 
 export const authOptions: NextAuthOptions = {
@@ -18,10 +18,12 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     }),
+
     CredentialsProvider({
 
       name: 'credentials',
@@ -39,34 +41,30 @@ export const authOptions: NextAuthOptions = {
           return user
         }
         else {
-          const {data} = await useCredentialRegister(credentials?.email!, credentials?.username!, credentials?.password!);
-          const user = data.registerWithAuthentication;
-          return user;
-        }
-        
-        // const userData = await axios({
-        //   method:'post',
-        //   url:'http://localhost:8000/api/v1/login',
-        //   data: {
-        //     email: credentials?.email,
-        //     password: credentials?.password
-        //   }
-        // })
-        //console.log(userData)
-        
-        return null
+          try {
+            const {data} = await useCredentialRegister(credentials?.email!, credentials?.username!, credentials?.password!);
+            const user = data.registerWithAuthentication;
+            return user;
+          } catch (error) {
+            console.log(error)
+            return null
+          }
+        }        
       }
     })
   ],
+
   secret: process.env.SECRET,
 
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60 // 30 days
   },
+
   callbacks: {
     async jwt({ token, user }) {
       
+      console.log("JWT user: ", user)
       return {...token, ...user};
     },
     async session({ session, token, user }) {
@@ -76,24 +74,28 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async signIn({user, account, profile, email, credentials}) {
-      console.log("BEFORE USER VERIFICATION")
-        
+
+      const cookies = getCookies();
+      const username = cookies.get('username')
+      console.log("Username: ", username)
+
       if(account?.provider === 'google' || account?.provider === 'github') {
+
         console.log(profile?.email, profile?.name)
-        const hello = await useAuthenticatedLogin(profile?.email!, profile?.name!)
-        console.log(hello)
+
+        if(username !== undefined && username !== null && username.length > 0) {
+          console.log("Creating user in NextAuth");
+          const newUser = await useAuthenticatedProviderRegister(profile?.email!, profile?.name!, username);
+          console.log(newUser)
+        }
+        else {
+          const hello = await useAuthenticatedLogin(profile?.email!, profile?.name!)
+          console.log(hello)
+        }
+
+        cookies.remove('username')
       }
         
-      console.log("User: ", user);
-      console.log("Account: ", account);
-      console.log("Profile", profile);
-      console.log("Email: ", email);
-      console.log("Credentials", credentials);
-      console.log("User: ", user);
-      console.log("Account: ", account);
-      console.log("Profile", profile);
-      console.log("Email: ", email);
-      console.log("Credentials", credentials);
       return true
     }
   },
