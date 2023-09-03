@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import axios from "axios"
 import { SetStateAction, useEffect, useState,Dispatch } from "react"
@@ -49,7 +50,16 @@ const UsernameCheck = ({username, setValue}: {username: string, setValue: Dispat
   }
 
   return (
-    <button disabled={username === undefined ||username.length === 0} className={`border border-white p-2 px-3 rounded-md ${username === undefined || username.length === 0 ? "opacity-50" : "opacity-100"}`}
+    <button disabled={username === undefined || username.length === 0 || username.includes(" ") || username.includes("@") || username.includes("#") || username.includes("!")
+    || username.includes("$") || username.includes("%") || username.includes("^") || username.includes("&") || username.includes("*") || username.includes("(")
+    || username.includes(")") || username.includes("+") || username.includes("=") || username.includes("`") || username.includes("~") || username.includes("[")
+    || username.includes("]") || username.includes("{") || username.includes("}") || username.includes("|") || username.includes(";") || username.includes(":")} 
+    className={`border border-white p-2 px-3 rounded-md
+    ${username === undefined || username.length === 0 || username.includes(" ") || username.includes("@") || username.includes("#") || username.includes("!")
+    || username.includes("$") || username.includes("%") || username.includes("^") || username.includes("&") || username.includes("*") || username.includes("(")
+    || username.includes(")") || username.includes("+") || username.includes("=") || username.includes("`") || username.includes("~") || username.includes("[")
+    || username.includes("]") || username.includes("{") || username.includes("}") || username.includes("|") || username.includes(";") || username.includes(":") 
+    ? "opacity-50" : "opacity-100"}`}
     onClick={handleAvailibilityCheck}>
       {
         currentState === null ? "Check" : currentState === true ? (<VscCheck className="text-xl mx-2 text-green-500"/>) 

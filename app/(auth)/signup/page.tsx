@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import UsernameCheck from '@/components/buttons/UsernameCheck';
 import { FcGoogle } from 'react-icons/fc'
-import { FaGithub } from "react-icons/fa"
+import { FaGithub, FaSpotify } from "react-icons/fa"
 import { useCookies } from 'next-client-cookies';
 export const dynamic = "force-dynamic";
 
@@ -32,33 +32,23 @@ export default function Page() {
 
   const schema: ZodType<formData> = z.object({
     name: z.string().min(2).max(25),
-    username: z.string().min(4).max(10),
+    username: z.string().min(4).max(20).regex(/^[A-Za-z0-9_-]+$/),
     email: z.string().email(),
     password: z.string().min(6).max(20),
     confirmPassword: z.string().min(6).max(20),
-
 
   }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"]
   });
 
-  const { register, handleSubmit, getValues, watch } = useForm<formData>({ resolver: zodResolver(schema) })
+  const { register, handleSubmit, watch } = useForm<formData>({ resolver: zodResolver(schema) })
 
-  const { data: session } = useSession();
-  const [authObj, setAuthObj] = useState<AuthObjFields>({ email: "", password: "", username: "" });
+  // const { data: session } = useSession();
+  // const [authObj, setAuthObj] = useState<AuthObjFields>({ email: "", password: "", username: "" });
   const [usernameAvailable, setUsernameAvailable] = useState<boolean>(false);
   const getUsername = watch("username")
 
-  const handleCredentialLogIn = () => {
-    signIn("credentials", {
-      email: authObj.email,
-      password: authObj.password,
-      callbackUrl: '/',
-      redirect: true
-    }
-    )
-  }
   const cookies = useCookies();
 
   const handleGooglelogIn = () => {
@@ -79,9 +69,26 @@ export default function Page() {
     )
   }
 
+  const handleSpotifylogIn = () => {
+    cookies.set('username', getUsername)
+    signIn("spotify", {
+        callbackUrl: '/profile',
+        redirect: true,
+      }
+    )
+  }
+
   const submitHandler = (data: formData) => {
-    console.log(data)
-    console.log(getValues("username"))
+    console.log(data);
+    signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      username: data.username,
+      name: data.name,
+      callbackUrl: '/profile',
+      redirect: true
+    }
+  )
   }
 
 
@@ -197,12 +204,13 @@ export default function Page() {
             </p>
             <form onSubmit={handleSubmit(submitHandler)}
               action="#" method="POST" className="mt-8">
-              <div className={`flex flex-col gap-1 lg:px-5 p-3 backdrop-blur-lg ${usernameAvailable ? "bg-green-500/30" : "bg-slate-200/10"}
+              <div className={`flex flex-col gap-1 lg:px-5 p-3 backdrop-blur-lg 
+              ${usernameAvailable ? "bg-green-500/30" : "bg-slate-200/10"}
               rounded-md border border-transparent hover:border-white/20 transition-all duration-100`}>
                 <label className='text-sm opacity-90'>Username</label>
                 <div className='flex items-center gap-2'>
                   <input className='w-[75%] bg-black/75 border border-white/20 p-2 rounded-md lg:my-1'
-                    type="text" placeholder='ex: @username' {...register("username", { required: true })} />
+                    type="text" placeholder='ex: @username' {...register("username", {required: true, pattern: /^[A-Za-z0-9_-]+$/})} />
                   <UsernameCheck username={getUsername} setValue={setUsernameAvailable} />
                 </div>
               </div>
@@ -218,36 +226,50 @@ export default function Page() {
                   type="text" placeholder='Email' {...register("email")} />
               </div>
               <div className='flex flex-col lg:flex-row gap-1 mb-3 lg:gap-4'>
-                <div className="flex flex-col lg:w-1/2">
+                <div className="flex flex-col lg:w-[48%]">
                   <label className='hidden lg:block text-sm opacity-70'>Password</label>
                   <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
                     type="text" placeholder='Password' {...register("password")} />
                 </div>
-                <div className="flex flex-col lg:w-1/2">
+                <div className="flex flex-col lg:w-[48%]">
                   <label className='hidden lg:block text-sm opacity-70'>Confirm password</label>
                   <input className=' bg-transparent border border-white/20 p-2 rounded-md my-1'
                     type="text" placeholder='Confirm password' {...register("confirmPassword")} />
                 </div>
               </div>
-              <button disabled={!usernameAvailable} className={`flex justify-center transition-all duration-200 ${usernameAvailable ? "opacity-100" : "opacity-30"}
-              border border-white/50 text-white/80 p-2 rounded-md w-full`}>
-                <input type="submit" />
+              <button disabled={!usernameAvailable} 
+              className={`flex justify-center transition-all duration-200 border border-white/50 text-white/80 p-2 rounded-md w-full
+              ${usernameAvailable ? "opacity-100 hover:bg-slate-50 hover:text-black hover:scale-95" : "opacity-30"}`}>
+                Submit
               </button>
             </form>
-            <div className='flex justify-center items-center gap-1 my-1'>
+            <div className='flex justify-center items-center gap-2 my-1'>
               <div className='border-b w-[45%] border-white/30'></div>
               <div className="opacity-75">Or</div>
               <div className='border-b w-[45%] border-white/30'></div>
             </div>
-            <div className="mt-3 flex justify-center gap-4 items-center">
-              <button onClick={handleGooglelogIn} disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 p-1 px-2 rounded-full transition-all duration-200
-              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
-                <FcGoogle className="" /><p className='hidden md:block'>Google</p>
-              </button>
-              <button onClick={handleGithublogIn} disabled={!usernameAvailable} className={`flex gap-2 w-2/5 border border-white/20 h-12 px-2 rounded-full transition-all duration-200
-              justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
-                <FaGithub className="" /><p className='hidden md:block'>Github</p>
-              </button>
+            <div className="mt-3 grid grid-cols-2 gap-7 items-center">
+              <div className='lg:w-full'>
+                <button onClick={handleGooglelogIn} disabled={!usernameAvailable} 
+                className={`flex gap-2 w-full border border-white/20 h-12 p-1 px-4 rounded-full transition-all duration-200
+                justify-center items-center hover:border-white/75 ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
+                  <FcGoogle/><p className='hidden md:block'>Google</p>
+                </button>
+              </div>
+              <div className='lg:w-full'>
+                <button onClick={handleGithublogIn} disabled={!usernameAvailable} className={`flex gap-2 w-full border border-white/20 h-12 px-4 rounded-full 
+                transition-all duration-200 justify-center items-center hover:border-white/75 
+                ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
+                  <FaGithub/><p className='hidden md:block'>Github</p>
+                </button>
+              </div>
+              <div className='lg:w-full'>
+                <button onClick={handleSpotifylogIn} disabled={!usernameAvailable} className={`flex gap-2 w-full border border-white/20 h-12 px-4 rounded-full 
+                transition-all duration-200 justify-center items-center hover:border-white/75 
+                ${usernameAvailable ? "opacity-100" : "opacity-30"}`}>
+                  <FaSpotify className=" text-green-600"/><p className='hidden md:block'>Spotify</p>
+                </button>
+              </div>
             </div>
           </div>
         </div>
