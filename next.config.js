@@ -25,7 +25,13 @@ const nextConfig = {
             hostname: 'images.unsplash.com',
             port: '',
             pathname: '/**'
-          }
+          },
+          {
+            protocol: 'https',
+            hostname: 'static.animecorner.me',
+            port: '',
+            pathname: '/**'
+          },
         ],
       },
 }

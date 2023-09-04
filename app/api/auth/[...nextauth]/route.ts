@@ -8,9 +8,7 @@ import { useUserLoginGQLServer } from "@/lib/graphql/hooks/userLogingql";
 import { useAuthenticatedLogin } from "@/lib/graphql/hooks/useAuthenticatedLogin";
 import { useCredentialRegister } from "@/lib/graphql/hooks/useCredentialRegister";
 import { getCookies } from 'next-client-cookies/server';
-import { useAmp } from "next/amp";
 import { useAuthenticatedProviderRegister } from "@/lib/graphql/hooks/useAuthenticatedProviderRegister";
-
 
 export const authOptions: NextAuthOptions = {
 
@@ -50,6 +48,10 @@ export const authOptions: NextAuthOptions = {
           const {data} = await useUserLoginGQLServer(credentials?.email as string, credentials?.password as string)
           console.log("Data: ", data)
           const user = data.userLogin;
+
+          // const dispatch = useDispatch<AppDispatch>();
+          // dispatch(fetchUserDetails());
+
           return user
         }
         else {
@@ -57,7 +59,11 @@ export const authOptions: NextAuthOptions = {
             console.log("Creating user with credentials")
             const {data} = await useCredentialRegister(credentials?.email!, credentials?.name!, credentials?.password!, credentials?.username!);
             const newUser = data.registerWithCredentialsAuthentication;
-            console.log(newUser)
+            console.log(newUser);
+
+            // const dispatch = useDispatch<AppDispatch>();
+            // dispatch(fetchUserDetails());
+
             return newUser;
 
           } catch (error) {
@@ -82,12 +88,14 @@ export const authOptions: NextAuthOptions = {
       console.log("JWT user: ", user)
       return {...token, ...user};
     },
+
     async session({ session, token, user }) {
       session.user.token = token.token;
       session.user.bio = token.bio;
       session.user.profileImageUrl = token.profileImageUrl;
       return session;
     },
+
     async signIn({user, account, profile, email, credentials}) {
 
       console.log("User: ", user);
@@ -101,12 +109,10 @@ export const authOptions: NextAuthOptions = {
       console.log("Email: ", email);
       console.log("Credentials", credentials);
 
-      const cookies = getCookies();
-      const username = cookies.get('username')
-      console.log("Username: ", username)
-
       if(account?.provider === 'google' || account?.provider === 'github' || account?.provider === 'spotify') {
-
+        const cookies = getCookies();
+        const username = cookies.get('username')
+        console.log("Username: ", username)
         console.log(user?.email, user?.name);
 
         if(username !== undefined && username !== null && username.length > 0) {
@@ -115,13 +121,14 @@ export const authOptions: NextAuthOptions = {
           console.log(newUser)
         }
         else {
-          const hello = await useAuthenticatedLogin(profile?.email!, profile?.name!)
+          console.log("Login Authenticated")
+          const hello = await useAuthenticatedLogin(profile?.email!)
           console.log(hello)
         }
 
         cookies.remove('username')
       }
-        
+
       return true
     }
   },

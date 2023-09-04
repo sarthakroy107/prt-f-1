@@ -1,0 +1,79 @@
+"use client"
+import { gql } from '@apollo/client'
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import Image from 'next/image'
+import { BsThreeDots } from 'react-icons/bs'
+import { useEffect, useState } from 'react'
+import React from 'react'
+import { signOut } from 'next-auth/react'
+
+export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
+    console.log(email)
+    const query = gql`
+        query Query($email: String!) {
+            fetchUserDetailsWithEmail(email: $email) {
+                name
+                username
+                profileImageUrl
+            }
+        }
+    `
+    const { data }: { data: any } = useSuspenseQuery(query, { variables: { email } })
+
+    console.log(data.fetchUserDetailsWithEmail);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(()=> {
+        const handleOutsideClick = (event:any) => {
+            if (isModalOpen && !event.target.closest('.modal-content')) {
+              setIsModalOpen(false)
+            }
+          };
+      
+          // Add event listener when the component mounts
+          window.addEventListener('click', handleOutsideClick);
+      
+          // Remove event listener when the component unmounts
+          return () => {
+            window.removeEventListener('click', handleOutsideClick);
+          };
+    }, [isModalOpen])
+
+
+    if (email === null || email === undefined) {
+        return (
+            <div>
+                Email not found
+            </div>
+        )
+    }
+
+    return (
+        <>
+            {/* <Link href={'/profile'}> */}
+            <div className='w-fit p-2 px-5 rounded-full lg:flex items-center gap-3 hover:bg-slate-100/10 transition-all duration-200 hidden'>
+                <Image className='rounded-full w-11 h-11 object-cover'
+                    src={data.fetchUserDetailsWithEmail.profileImageUrl}
+                    width={100}
+                    height={100}
+                    alt='ProfileImage'
+                />
+                <div className='text-sm'>
+                    <p>{data.fetchUserDetailsWithEmail.name}</p>
+                    <p>{data.fetchUserDetailsWithEmail.username}</p>
+                </div>
+                <div onClick={()=> setIsModalOpen(!isModalOpen)}
+                    className='modal-content group p-[0.30rem] px-1 rounded-full hover:bg-slate-100/20 cursor-pointer hover:backdrop-blur-md transition-all duration-50'>
+                    <BsThreeDots />
+                </div>
+                <div onClick={()=> signOut()} className={`modal-content fixed h-12 w-32 bottom-24 left-96 ${isModalOpen ? "visible" : "invisible"}
+              border border-white/75 flex justify-center items-center rounded-md transition-all duration-200 cursor-pointer 
+              hover:bg-slate-100/10 backdrop-blur-lg`}>
+                    Logout
+                </div>
+            </div>
+            {/* </Link> */}
+        </>
+    )
+}

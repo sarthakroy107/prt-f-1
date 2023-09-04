@@ -1,27 +1,31 @@
 import { gql } from "@apollo/client";
 import { getClient } from "@/lib/graphql/client";
 
-const mutation = gql`
-  mutation Mutation($email: String!, $name: String!) {
-    authWidhAuthenticatedProvider(email: $email, name: $name) {
+const query = gql`
+  query Query($email: String!) {
+    loginWidhAuthenticatedProvider(email: $email) {
       _id
+      name
+      email
+      password
+      username
+      profileImageUrl
       bio
       blue
       createdAt
-      email
-      name
+      updatedAt
+      token
     }
   }
 
 `
 
-export const useAuthenticatedLogin = async (email: string, name: string) => {
+export const useAuthenticatedLogin = async (email: string) => {
   console.log(email)
-    const {data, errors} = await getClient().mutate({
-      mutation, 
+    const {data, errors} = await getClient().query({
+      query, 
       variables:{
-        email,
-        name
+        email
       }
   })
     console.log(errors)

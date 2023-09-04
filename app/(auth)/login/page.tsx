@@ -20,21 +20,21 @@ export default function Page() {
     signIn("credentials",{
       email: authObj.email,
       password: authObj.password,
-      callbackUrl:'/',
+      callbackUrl:'/profile',
       redirect: true
       }
     )
   }
   const handleGooglelogIn = () => {
     signIn("google",{
-      callbackUrl:'/',
+      callbackUrl:'/profile',
       redirect: true
       }
     )
   }
   const handleGithublogIn = () => {
     signIn("github",{
-      callbackUrl:'/',
+      callbackUrl:'/profile',
       redirect: true
       }
     )
