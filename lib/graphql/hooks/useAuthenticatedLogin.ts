@@ -26,7 +26,7 @@ export const useAuthenticatedLogin = async (email: string) => {
       query, 
       variables:{
         email
-      }
+      },
   })
     console.log(errors)
     return {

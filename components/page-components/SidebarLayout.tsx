@@ -26,11 +26,11 @@ const SidebarLayout = () => {
     }
 
   return (
-    <main className='sticky top-4 flex flex-col h-full justify-between gap-2'>
+    <main className=' h-full flex flex-col justify-between gap-2 py-7 sticky top-7'>
       <div className='flex flex-col gap-2'>
         <Image className='rounded-full'
           src={image}
-          width={69}
+          width={69} 
           height={69}
           alt='Image'
         />
@@ -39,20 +39,17 @@ const SidebarLayout = () => {
             const IconComponent: IconType = op.icon
             return (
               <div key={index}>
-                <Link href={op.route} className={`w-fit flex gap-3 p-3 px-5 rounded-full backdrop-blur-sm  hover:bg-slate-300/25 
+                <Link href={op.route} className={`w-fit flex gap-3 p-3 px-5 rounded-full backdrop-blur-sm  hover:bg-slate-300/20
+                border border-transparent hover:border-white/20 transition-all duration-75
                   ${pathname == op.route ? "bg-slate-300/25" : ""}`}>
                     <IconComponent className='relative top-1'/>
-                    {op.name}
+                    <p className=''>{op.name}</p>
                 </Link>
               </div>
             )
           })
         }
-        <div onClick={handleSignOut}
-        className='w-fit flex gap-3 p-3 px-5 rounded-full backdrop-blur-sm  hover:bg-slate-300/25'>
-          Sign out
-        </div>
-        <div className='w-fit p-3 px-20 rounded-full bg-[#1d9bf0ff] cursor-pointer hover:bg-[#0D8BDF] transition-all duration-150'>
+        <div className='w-fit mt-6 p-3 px-20 rounded-full bg-[#1d9bf0ff] cursor-pointer hover:bg-[#0D8BDF] transition-all duration-150'>
           Post
         </div>
       </div>

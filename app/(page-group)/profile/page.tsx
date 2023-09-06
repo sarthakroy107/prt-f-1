@@ -1,17 +1,26 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 
-import { fetchUserDetails } from "@/redux/slices/account"
-import { AppDispatch } from "@/redux/store"
+import ProfileDetails from "@/components/page-components/prifilePageComponents/ProfileDetails";
 import { useSession } from "next-auth/react"
-import { useDispatch } from "react-redux"
+import { redirect } from "next/navigation";
 
 const page = () => {
-  const {data: session, status} = useSession()
+  const {data: session, status} = useSession();
+  if(status === "unauthenticated") {
+    redirect('/login')
+  }
   
   return (
     <>
-      <div>{JSON.stringify(session)}  {status}</div>
+      <section className="bg-white/5 sticky top-0 backdrop-blur-xlflex gap-2" >
+        {
+          status === "authenticated" ? (<ProfileDetails email={session?.user?.email} />) : status === "loading" ? (<>Loading...</>) : (<>Unauthorized</>)
+        }
+      </section>
+      <section>
+
+      </section>
     </>
   )
 }

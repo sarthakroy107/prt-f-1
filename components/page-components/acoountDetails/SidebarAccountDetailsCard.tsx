@@ -1,11 +1,12 @@
 "use client"
-import { gql } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import Image from 'next/image'
 import { BsThreeDots } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
 import React from 'react'
 import { signOut } from 'next-auth/react'
+import { MdVerified } from 'react-icons/md'
 
 export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
     console.log(email)
@@ -15,10 +16,16 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
                 name
                 username
                 profileImageUrl
+                banner
+                blue
+                tweetCount
+                createdAt
+                followersCount
+                followingCount
             }
         }
     `
-    const { data }: { data: any } = useSuspenseQuery(query, { variables: { email } })
+    const { data }: { data: any } = useSuspenseQuery(query, { variables: { email }, context: { Headers: "Hello"}})
 
     console.log(data.fetchUserDetailsWithEmail);
 
@@ -52,7 +59,7 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
     return (
         <>
             {/* <Link href={'/profile'}> */}
-            <div className='w-fit p-2 px-5 rounded-full lg:flex items-center gap-3 hover:bg-slate-100/10 transition-all duration-200 hidden'>
+            <div className='w-fit p-2 flex rounded-full items-center gap-3 hover:bg-slate-100/10 transition-all duration-200'>
                 <Image className='rounded-full w-11 h-11 object-cover'
                     src={data.fetchUserDetailsWithEmail.profileImageUrl}
                     width={100}
@@ -60,8 +67,11 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
                     alt='ProfileImage'
                 />
                 <div className='text-sm'>
-                    <p>{data.fetchUserDetailsWithEmail.name}</p>
-                    <p>{data.fetchUserDetailsWithEmail.username}</p>
+                    <div className='flex gap-1'>
+                        {data.fetchUserDetailsWithEmail.name.length > 9 ? (<>{data.fetchUserDetailsWithEmail.name.substr(0,8) +  "..."}</>) : 
+                        (<>{data.fetchUserDetailsWithEmail.name}</>)} {data.fetchUserDetailsWithEmail.blue ? (<><MdVerified className="text-blue-500"/></>) : (<></>)}
+                    </div>
+                    <p className='opacity-75 font-normal'>{data.fetchUserDetailsWithEmail.username}</p>
                 </div>
                 <div onClick={()=> setIsModalOpen(!isModalOpen)}
                     className='modal-content group p-[0.30rem] px-1 rounded-full hover:bg-slate-100/20 cursor-pointer hover:backdrop-blur-md transition-all duration-50'>
