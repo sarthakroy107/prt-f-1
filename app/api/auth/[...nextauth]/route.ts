@@ -49,9 +49,6 @@ export const authOptions: NextAuthOptions = {
           console.log("Data: ", data)
           const user = data.userLogin;
 
-          // const dispatch = useDispatch<AppDispatch>();
-          // dispatch(fetchUserDetails());
-
           return user
         }
         else {
@@ -60,9 +57,6 @@ export const authOptions: NextAuthOptions = {
             const {data} = await useCredentialRegister(credentials?.email!, credentials?.name!, credentials?.password!, credentials?.username!);
             const newUser = data.registerWithCredentialsAuthentication;
             console.log(newUser);
-
-            // const dispatch = useDispatch<AppDispatch>();
-            // dispatch(fetchUserDetails());
 
             return newUser;
 
@@ -90,6 +84,9 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token, user }) {
+      console.log(session);
+      console.log(token)
+      console.log(user)
       session.user.token = token.token;
       session.user.bio = token.bio;
       session.user.profileImageUrl = token.profileImageUrl;
@@ -103,11 +100,7 @@ export const authOptions: NextAuthOptions = {
       console.log("Profile", profile);
       console.log("Email: ", email);
       console.log("Credentials", credentials);
-      console.log("User: ", user);
-      console.log("Account: ", account);
-      console.log("Profile", profile);
-      console.log("Email: ", email);
-      console.log("Credentials", credentials);
+
 
       if(account?.provider === 'google' || account?.provider === 'github' || account?.provider === 'spotify') {
         const cookies = getCookies();
@@ -119,10 +112,15 @@ export const authOptions: NextAuthOptions = {
           console.log("Creating user in NextAuth");
           const newUser = await useAuthenticatedProviderRegister(user?.email!, user.name!, username);
           console.log(newUser)
+          //@ts-ignore
+          user.token = newUser.data.registerWithCredentialsAuthentication.token
         }
         else {
           console.log("Login Authenticated")
           const hello = await useAuthenticatedLogin(profile?.email!)
+          //@ts-ignore
+          user.token = hello.data.loginWidhAuthenticatedProvider.token;
+          console.log(user);
           console.log(hello)
         }
 

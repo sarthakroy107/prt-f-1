@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 
 const page = () => {
   const {data: session, status} = useSession();
+  console.log(session)
   if(status === "unauthenticated") {
     redirect('/login')
   }
@@ -19,7 +20,7 @@ const page = () => {
         }
       </section>
       <section>
-
+        
       </section>
     </>
   )
