@@ -10,6 +10,9 @@ export const { getClient } = registerApolloClient(() => {
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
       uri: "http://localhost:8000/graphql",
+      headers: {
+        Authorization: "session?.user?.token",
+      },
     }),
   });
 });

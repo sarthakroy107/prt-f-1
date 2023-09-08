@@ -7,8 +7,10 @@ import { useEffect, useState } from 'react'
 import React from 'react'
 import { signOut } from 'next-auth/react'
 import { MdVerified } from 'react-icons/md'
+import { useCookies } from 'next-client-cookies'
 
 export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
+    const cookie = useCookies();
     console.log(email)
     const query = gql`
         query Query($email: String!) {
@@ -30,6 +32,11 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
     console.log(data.fetchUserDetailsWithEmail);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleSignOut = () => {
+        cookie.remove("token");
+        signOut()
+    }
 
     useEffect(()=> {
         const handleOutsideClick = (event:any) => {
@@ -77,7 +84,7 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
                     className='modal-content group p-[0.30rem] px-1 rounded-full hover:bg-slate-100/20 cursor-pointer hover:backdrop-blur-md transition-all duration-50'>
                     <BsThreeDots />
                 </div>
-                <div onClick={()=> signOut()} className={`modal-content fixed h-12 w-32 bottom-24 left-96 ${isModalOpen ? "visible" : "invisible"}
+                <div onClick={handleSignOut} className={`modal-content fixed h-12 w-32 bottom-24 left-96 ${isModalOpen ? "visible" : "invisible"}
               border border-white/75 flex justify-center items-center rounded-md transition-all duration-200 cursor-pointer 
               hover:bg-slate-100/10 backdrop-blur-lg`}>
                     Logout

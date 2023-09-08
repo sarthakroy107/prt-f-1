@@ -9,6 +9,7 @@ import { useAuthenticatedLogin } from "@/lib/graphql/hooks/useAuthenticatedLogin
 import { useCredentialRegister } from "@/lib/graphql/hooks/useCredentialRegister";
 import { getCookies } from 'next-client-cookies/server';
 import { useAuthenticatedProviderRegister } from "@/lib/graphql/hooks/useAuthenticatedProviderRegister";
+import { cookies } from 'next/headers'
 
 export const authOptions: NextAuthOptions = {
 
@@ -103,10 +104,11 @@ export const authOptions: NextAuthOptions = {
 
 
       if(account?.provider === 'google' || account?.provider === 'github' || account?.provider === 'spotify') {
-        const cookies = getCookies();
-        const username = cookies.get('username')
+        const cookie = getCookies();
+        const username = cookie.get('username')
         console.log("Username: ", username)
         console.log(user?.email, user?.name);
+        
 
         if(username !== undefined && username !== null && username.length > 0) {
           console.log("Creating user in NextAuth");
@@ -122,14 +124,15 @@ export const authOptions: NextAuthOptions = {
           user.token = hello.data.loginWidhAuthenticatedProvider.token;
           console.log(user);
           console.log(hello)
+          cookies().set('token', hello.data.loginWidhAuthenticatedProvider.token)
         }
-
-        cookies.remove('username')
+        cookie.remove('username')
       }
-
       return true
-    }
+    },
+    
   },
+
 
 }
 const handler = NextAuth(authOptions)
