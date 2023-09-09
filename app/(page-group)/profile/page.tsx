@@ -11,17 +11,22 @@ const page = () => {
   if(status === "unauthenticated") {
     redirect('/login')
   }
+
+  if(status === "loading") {
+    return(
+      <div>Loading...</div>
+    )
+  }
+
   
   return (
     <>
-      <section className="bg-white/5 sticky top-0 backdrop-blur-xlflex gap-2" >
+      <section className="flex gap-2 pb-2" >
         {
           status === "authenticated" ? (<ProfileDetails email={session?.user?.email} />) : status === "loading" ? (<>Loading...</>) : (<>Unauthorized</>)
         }
       </section>
-      <section>
-        
-      </section>
+      
     </>
   )
 }

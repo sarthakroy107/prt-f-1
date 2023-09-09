@@ -31,13 +31,13 @@ export default function RootLayout({
     <html lang="en">
       <body className='w-full min-h-screen flex justify-center items-center'>
         <NextAuthProviders>
-          <ApolloWrapper>
-            <ReduxProvider>
-              <ClientCookiesProvider value={cookies().getAll()}>
+          <ClientCookiesProvider value={cookies().getAll()}>
+            <ApolloWrapper>
+              <ReduxProvider>
                 {children}
-              </ClientCookiesProvider>
-            </ReduxProvider>
-          </ApolloWrapper>
+              </ReduxProvider>
+            </ApolloWrapper>
+          </ClientCookiesProvider>
         </NextAuthProviders>
       </body>
     </html>

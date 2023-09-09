@@ -1,12 +1,16 @@
+import { options } from '@/constants/profile-activity'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import Image from 'next/image'
+import { useState } from 'react'
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
 import { LuCalendarDays } from 'react-icons/lu'
+import Tweets from './activity/Tweets'
+import Replies from './activity/Replies'
+import Retweet from './activity/Retweet'
 
 const ProfileDetails = ({email}:{email: string}) => {
 
-    
   const query = gql`
     query Query($email: String!) {
       fetchUserDetailsWithEmail(email: $email) {
@@ -25,6 +29,8 @@ const ProfileDetails = ({email}:{email: string}) => {
   const { data }: { data: any } = useSuspenseQuery(query, { variables: { email } })
   console.log(data)
 
+  const [opt, setOpt] = useState<number>(1)
+
   const newDate = new Date(Number(data.fetchUserDetailsWithEmail.createdAt))
   console.log(newDate)
 
@@ -34,7 +40,7 @@ const ProfileDetails = ({email}:{email: string}) => {
         <div className="p-1 rounded-full hover:bg-slate-100/10 w-fit transition-all duration-100 cursor-pointer">
           <HiOutlineArrowSmallLeft className="text-2xl"/>
         </div>
-        <div>
+        <div className='bg-slate-300/5'>
           <p className='font-semibold'>{data.fetchUserDetailsWithEmail.name}</p>
           <p className='text-sm opacity-70'>{data.fetchUserDetailsWithEmail.tweetCount} Tweets</p>
         </div>
@@ -46,7 +52,7 @@ const ProfileDetails = ({email}:{email: string}) => {
       width={600}
       alt='Banner'
       />
-      <div className='w-full h-24 p-3 px-7 flex justify-between'>
+      <div className='w-full h-24 p-3 px-7 flex justify-between bg-slate-300/5'>
         <Image 
         src={data.fetchUserDetailsWithEmail.profileImageUrl}
         className='rounded-full w-36 h-36 object-cover relative top-[-4.5rem]'
@@ -58,11 +64,11 @@ const ProfileDetails = ({email}:{email: string}) => {
         }}
         alt='Banner'
         />
-        <div className='p-2 px-4 border border-white/50 rounded-full h-fit'>
+        <div className='p-2 px-4 border border-slate-300/50 rounded-full h-fit'>
           Edit profile
         </div>
       </div>
-      <div className='min-h-28 px-7'>
+      <div className='min-h-28 px-7 bg-slate-300/5'>
         <p className='text-xl font-semibold'>{data.fetchUserDetailsWithEmail.name}</p>
         <p className='opacity-75'>@{data.fetchUserDetailsWithEmail.username}</p>
         <p className='text-sm opacity-50 mt-1 flex'>
@@ -82,9 +88,27 @@ const ProfileDetails = ({email}:{email: string}) => {
           </div>
         </div>
       </div>
-      <div className='bg-white w-full h-screen text-black'>
-          sljncjolsjncosncon
-      </div>
+      <section>
+        <div className="flex w-full justify-around font-medium border-b border-white/20">
+          {
+            options.map((option, index)=>(
+              <div onClick={()=> setOpt(option.id)}
+              className="hover:bg-slate-100/20 w-full pt-2 transition-all duration-5s0 flex justify-center 
+              bg-slate-300/5 text-slate-300/75 cursor-pointer" key={index}>
+                <p>
+                  {option.name}
+                  <div className={`w-full h-[0.20rem] mt-2 ${opt === option.id ? "bg-blue-500" : ""} rounded-md`}></div>
+                </p>
+              </div>
+            ))
+          }
+        </div>
+        <div className="w-full">
+          {
+            opt === 1 ? (<Tweets/>) : opt === 2 ? (<Replies/>) : (<Retweet/>)
+          }
+        </div>
+      </section>
     </main>
   )
 }

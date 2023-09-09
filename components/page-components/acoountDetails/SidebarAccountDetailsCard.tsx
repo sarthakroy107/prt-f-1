@@ -44,11 +44,8 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
               setIsModalOpen(false)
             }
           };
-      
-          // Add event listener when the component mounts
           window.addEventListener('click', handleOutsideClick);
       
-          // Remove event listener when the component unmounts
           return () => {
             window.removeEventListener('click', handleOutsideClick);
           };
