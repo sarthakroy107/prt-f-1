@@ -40,7 +40,7 @@ const ProfileDetails = ({email}:{email: string}) => {
         <div className="p-1 rounded-full hover:bg-slate-100/10 w-fit transition-all duration-100 cursor-pointer">
           <HiOutlineArrowSmallLeft className="text-2xl"/>
         </div>
-        <div className='bg-slate-300/5'>
+        <div className=''>
           <p className='font-semibold'>{data.fetchUserDetailsWithEmail.name}</p>
           <p className='text-sm opacity-70'>{data.fetchUserDetailsWithEmail.tweetCount} Tweets</p>
         </div>

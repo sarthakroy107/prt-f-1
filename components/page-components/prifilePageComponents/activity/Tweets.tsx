@@ -19,6 +19,7 @@ const Tweets = () => {
           }
           body
           files
+          viewsCount
         }
       }
     `

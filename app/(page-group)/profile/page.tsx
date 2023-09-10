@@ -20,14 +20,11 @@ const page = () => {
 
   
   return (
-    <>
-      <section className="flex gap-2 pb-2" >
-        {
-          status === "authenticated" ? (<ProfileDetails email={session?.user?.email} />) : status === "loading" ? (<>Loading...</>) : (<>Unauthorized</>)
-        }
-      </section>
-      
-    </>
+    <section className="flex gap-2 pb-2" >
+      {
+        status === "authenticated" ? (<ProfileDetails email={session?.user?.email} />) : status === "loading" ? (<>Loading...</>) : (<>Unauthorized</>)
+      }
+    </section>
   )
 }
 
