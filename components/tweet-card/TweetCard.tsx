@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
-import { FaRegCommentAlt, FaRegHeart } from 'react-icons/fa'
+import { FaRegCommentAlt, FaRegHeart, FaHeart } from 'react-icons/fa'
 import { FaRetweet } from 'react-icons/fa6'
+import { VscListFlat } from 'react-icons/vsc'
+
+
 const TweetCard = ({tweet}: {tweet: any}) => {
+  const [liked, setLiked] = useState<Boolean>(false);
+
   return (
     <div className="w-full border-b border-white/25 flex ">
         <div className="p-3 w-[13%]">
@@ -27,20 +32,28 @@ const TweetCard = ({tweet}: {tweet: any}) => {
             }
           </div>
           <div className='w-full mt-3 flex'>
-           <div className='w-1/3'>
+           <div className='w-1/4'>
                 <div className='w-fit hover:bg-[#1c9bf1ff]/10 hover:text-[#1c9bf1ff] transition-all duration-100 rounded-full p-2'>
                     <FaRegCommentAlt className="text-lg text-slate-300/40"/>
                 </div>
             </div>
-            <div className='w-1/3'>
+            <div className='w-1/4'>
                 <div className='w-fit hover:bg-[#01bb7cff]/10 hover:text-[#01bb7cff] transition-all duration-150 rounded-full p-2'>
                     <FaRetweet className="text-lg text-slate-300/40"/>
                 </div>
             </div>
-            <div className='w-1/3'>
-                <div className='w-fit hover:bg-[#f91880ff]/10 hover:text-[#f91880ff] transition-all duration-100 rounded-full p-2'>
-                    <FaRegHeart className="text-lg text-slate-300/40"/>
+            <div className='w-1/4'>
+                <div onClick={()=>setLiked(!liked)}
+                className={`w-fit hover:bg-[#f91880ff]/10 hover:text-[#f91880ff] transition-all duration-100 rounded-full p-2`}>
+                    {
+                      liked ? (<FaHeart className="text-[#f91880ff]"/>) : (<FaRegHeart className={`text-lg text-slate-300/40`}/>)
+                    }
                 </div>
+            </div>
+            <div className='w-1/4'>
+              <div className='w-fit hover:bg-[#01bb7cff]/10 hover:text-[#01bb7cff] transition-all duration-150 rounded-full p-2'>
+                  <VscListFlat className="text-lg text-slate-300/40 -rotate-90"/>
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client"
 import TweetCard from "@/components/tweet-card/TweetCard"
 import { gql } from "@apollo/client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
@@ -29,9 +30,7 @@ const Tweets = () => {
     useEffect(()=>{
 
       if(data !== null) {
-       if(data !== null) {
         setTweetArr(data.fetchUserTweets)
-       }
       }
       console.log(tweetArr)
     }, [data])

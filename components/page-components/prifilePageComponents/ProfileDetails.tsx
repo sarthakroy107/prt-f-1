@@ -29,7 +29,7 @@ const ProfileDetails = ({email}:{email: string}) => {
   const { data }: { data: any } = useSuspenseQuery(query, { variables: { email } })
   console.log(data)
 
-  const [opt, setOpt] = useState<number>(1)
+  const [opt, setOpt] = useState(1)
 
   const newDate = new Date(Number(data.fetchUserDetailsWithEmail.createdAt))
   console.log(newDate)
