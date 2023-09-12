@@ -1,12 +1,80 @@
+"use client"
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { FaRegCommentAlt, FaRegHeart, FaHeart } from 'react-icons/fa'
 import { FaRetweet } from 'react-icons/fa6'
 import { VscListFlat } from 'react-icons/vsc'
+import axios from 'axios'
+import { useCookies } from 'next-client-cookies'
 
+interface tweetDetailsType {
+  isLiked: boolean
+  likeCount: number
+}
 
 const TweetCard = ({tweet}: {tweet: any}) => {
-  const [liked, setLiked] = useState<Boolean>(false);
+  console.log(tweet);
+  const [tweetDetails, setTweetDetails] = useState<tweetDetailsType>({
+    isLiked: tweet.isLiked,
+    likeCount: tweet.likeCount
+  });
+  const cookie = useCookies();
+  const token = cookie.get("token")
+  console.log(token)
+  const likeHandler = async () => {
+    if(tweetDetails.isLiked) {
+      try {
+        setTweetDetails({
+          ...tweetDetails,
+          isLiked: false,
+          likeCount: tweetDetails.likeCount-1,
+        })
+        const response = await axios({
+          method: 'put',
+          url: "http://localhost:8000/api/v1/unlike-tweet",
+          data: {
+            tweetId: tweet._id
+          },
+          headers: { 
+            Authorization: `Bearer ${token}` 
+          },
+        });
+      } catch (error) {
+        setTweetDetails({
+          ...tweetDetails,
+          isLiked: true,
+          likeCount: tweetDetails.likeCount+1,
+        })
+        console.log(error)
+      }
+    }
+    else {
+      try {
+        setTweetDetails({
+          ...tweetDetails,
+          isLiked: true,
+          likeCount: tweetDetails.likeCount+1,
+        })
+        await axios({
+          method: 'put',
+          url: "http://localhost:8000/api/v1/like-tweet",
+          data: {
+            tweetId: tweet._id
+          },
+          headers: { 
+            Authorization: `Bearer ${token}` 
+          },
+        })
+      } catch (error) {
+        setTweetDetails({
+          ...tweetDetails,
+          isLiked: false,
+          likeCount: tweetDetails.likeCount-1,
+        })
+        console.log(error)
+      }
+    }
+  }
 
   return (
     <div className="w-full border-b border-white/25 flex ">
@@ -43,11 +111,13 @@ const TweetCard = ({tweet}: {tweet: any}) => {
                 </div>
             </div>
             <div className='w-1/4'>
-                <div onClick={()=>setLiked(!liked)}
-                className={`w-fit hover:bg-[#f91880ff]/10 hover:text-[#f91880ff] transition-all duration-100 rounded-full p-2`}>
+                <div onClick={likeHandler}
+                className={`w-fit hover:bg-[#f91880ff]/10 hover:text-[#f91880ff] transition-all duration-100 rounded-full p-2 flex gap-2`}>
                     {
-                      liked ? (<FaHeart className="text-[#f91880ff]"/>) : (<FaRegHeart className={`text-lg text-slate-300/40`}/>)
+                      tweetDetails.isLiked ? (<FaHeart className="text-[#f91880ff]"/>) : (<FaRegHeart className={`text-lg text-slate-300/40`}/>)
                     }
+                    
+                    <p className={`relative -top-1 opacity-80 ${tweetDetails.isLiked ? "text-[#f91880ff]" : ""}`}>{tweetDetails.likeCount}</p>
                 </div>
             </div>
             <div className='w-1/4'>

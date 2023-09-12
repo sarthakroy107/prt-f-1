@@ -8,17 +8,19 @@ import { useEffect, useState } from "react"
 
 const Tweets = () => {
     const query = gql`
-      query Query {
+      query ExampleQuery {
         fetchUserTweets {
+          isLiked
+          likeCount
           _id
           author {
-            _id
             blue
             name
-            profileImageUrl
             username
+            profileImageUrl
           }
           body
+          createdAt
           files
           viewsCount
         }

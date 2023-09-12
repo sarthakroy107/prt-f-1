@@ -2,17 +2,6 @@ import { getClient } from "../../../lib/graphql/client";
 
 import { gql } from "@apollo/client";
 
-// const query = gql`
-//     query {
-//         characters {
-//             results {
-//                 id
-//                 name
-//                 image
-//             }
-//         }
-//     }
-// `
 const query = gql`
     query Query {
     fetchUsers {
