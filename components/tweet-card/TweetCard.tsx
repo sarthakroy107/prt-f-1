@@ -81,6 +81,7 @@ const TweetCard = ({tweet}: {tweet: any}) => {
         <div className="p-3 w-[13%]">
           <Image className="w-12 h-12 object-cover rounded-full" src={tweet.author.profileImageUrl} width={200} height={200} alt="profile image"/>
         </div>
+        
         <div className="w-[87%] py-2">
           <div className="text-slate-500/75 font-medium">
             <span className="font-semibold text-white">{tweet.author.name}</span> @{tweet.author.username}
