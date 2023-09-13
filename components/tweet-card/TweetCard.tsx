@@ -10,13 +10,20 @@ import { useCookies } from 'next-client-cookies'
 interface tweetDetailsType {
   isLiked: boolean
   likeCount: number
+  retweetCount: number
+  replyCount: number
+  viewsCount: number
 }
 
 const TweetCard = ({tweet}: {tweet: any}) => {
   console.log(tweet);
   const [tweetDetails, setTweetDetails] = useState<tweetDetailsType>({
     isLiked: tweet.isLiked,
-    likeCount: tweet.likeCount
+    likeCount: tweet.likeCount,
+    retweetCount: tweet.retweetCount,
+    replyCount: tweet.replyCount,
+    viewsCount: tweet.viewsCount
+
   });
   const cookie = useCookies();
   const token = cookie.get("token")
@@ -101,15 +108,22 @@ const TweetCard = ({tweet}: {tweet: any}) => {
             }
           </div>
           <div className='w-full mt-3 flex'>
-           <div className='w-1/4'>
+           <div className='w-1/4 flex gap-2 group'>
                 <div className='w-fit hover:bg-[#1c9bf1ff]/10 hover:text-[#1c9bf1ff] transition-all duration-100 rounded-full p-2'>
                     <FaRegCommentAlt className="text-lg text-slate-300/40"/>
                 </div>
+                <p className={` group-hover:text-[#1c9bf1ff] opacity-50 transition-all duration-100 relative top-[0.30rem]`}>
+                  {tweetDetails.replyCount}
+                </p>
             </div>
-            <div className='w-1/4'>
+            <div className='w-1/4 flex gap-2 group'>
                 <div className='w-fit hover:bg-[#01bb7cff]/10 hover:text-[#01bb7cff] transition-all duration-150 rounded-full p-2'>
                     <FaRetweet className="text-lg text-slate-300/40"/>
                 </div>
+                <p className={` group-hover:text-[#01bb7cff] opacity-50 transition-all duration-100 relative top-[0.30rem] 
+                ${tweetDetails.isLiked ? "text-[#f91880ff]" : ""}`}>
+                  {tweetDetails.replyCount}
+                </p>
             </div>
             <div className='w-1/4 flex gap-2 group'>
                 <div onClick={likeHandler}
@@ -117,14 +131,16 @@ const TweetCard = ({tweet}: {tweet: any}) => {
                     {
                       tweetDetails.isLiked ? (<FaHeart className="text-[#f91880ff]"/>) : (<FaRegHeart className={`text-lg text-slate-300/40`}/>)
                     }
-                    
                 </div>
                 <p className={` group-hover:text-[#f91880ff] opacity-50 transition-all duration-100 relative top-[0.30rem] ${tweetDetails.isLiked ? "text-[#f91880ff]" : ""}`}>{tweetDetails.likeCount}</p>
             </div>
-            <div className='w-1/4'>
+            <div className='w-1/4 flex gird-2 '>
               <div className='w-fit hover:bg-[#01bb7cff]/10 hover:text-[#01bb7cff] transition-all duration-150 rounded-full p-2'>
                   <VscListFlat className="text-lg text-slate-300/40 -rotate-90"/>
               </div>
+              <p className={` group-hover:text-[#01bb7cff] opacity-50 transition-all duration-100 relative top-[0.30rem] `}>
+                {tweetDetails.viewsCount}
+              </p>
             </div>
           </div>
         </div>

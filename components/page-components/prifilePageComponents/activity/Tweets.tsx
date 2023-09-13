@@ -23,6 +23,8 @@ const Tweets = () => {
           createdAt
           files
           viewsCount
+          retweetCount
+          replyCount
         }
       }
     `
