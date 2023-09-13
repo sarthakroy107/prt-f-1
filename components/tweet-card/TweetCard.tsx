@@ -111,15 +111,15 @@ const TweetCard = ({tweet}: {tweet: any}) => {
                     <FaRetweet className="text-lg text-slate-300/40"/>
                 </div>
             </div>
-            <div className='w-1/4'>
+            <div className='w-1/4 flex gap-2 group'>
                 <div onClick={likeHandler}
-                className={`w-fit hover:bg-[#f91880ff]/10 hover:text-[#f91880ff] transition-all duration-100 rounded-full p-2 flex gap-2`}>
+                className={`w-fit hover:bg-[#f91880ff]/10 hover:text-[#f91880ff] transition-all duration-100 rounded-full p-2`}>
                     {
                       tweetDetails.isLiked ? (<FaHeart className="text-[#f91880ff]"/>) : (<FaRegHeart className={`text-lg text-slate-300/40`}/>)
                     }
                     
-                    <p className={`relative -top-1 opacity-80 ${tweetDetails.isLiked ? "text-[#f91880ff]" : ""}`}>{tweetDetails.likeCount}</p>
                 </div>
+                <p className={` group-hover:text-[#f91880ff] opacity-50 transition-all duration-100 relative top-[0.30rem] ${tweetDetails.isLiked ? "text-[#f91880ff]" : ""}`}>{tweetDetails.likeCount}</p>
             </div>
             <div className='w-1/4'>
               <div className='w-fit hover:bg-[#01bb7cff]/10 hover:text-[#01bb7cff] transition-all duration-150 rounded-full p-2'>
