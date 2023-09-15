@@ -3,34 +3,36 @@
 import TweetCard from "@/components/tweet-card/TweetCard"
 import { gql } from "@apollo/client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
-import Image from "next/image"
 import { useEffect, useState } from "react"
 
 const Tweets = () => {
     const query = gql`
-      query ExampleQuery {
+      query Query {
         fetchUserTweets {
           isLiked
           likeCount
-          _id
-          author {
-            blue
-            name
-            username
-            profileImageUrl
-          }
-          body
+          _id   
+          text
           createdAt
           files
           viewsCount
           retweetCount
           replyCount
+          author_id {
+            blue
+            name
+            username
+            profileImageUrl
+          }
         }
       }
     `
     const [tweetArr, setTweetArr] = useState(null);
+
     const { data }: {data: any} = useSuspenseQuery(query)
+
     console.log(data)
+
     useEffect(()=>{
 
       if(data !== null) {
@@ -44,6 +46,7 @@ const Tweets = () => {
       <>Loading...</>
     )
   }
+  
   return (
    <>
     {

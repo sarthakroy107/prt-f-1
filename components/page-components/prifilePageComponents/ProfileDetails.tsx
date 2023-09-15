@@ -13,18 +13,18 @@ const ProfileDetails = ({email}:{email: string}) => {
 
   const query = gql`
     query Query($email: String!) {
-      fetchUserDetailsWithEmail(email: $email) {
-        name
-        username
-        profileImageUrl
-        banner
-        blue
-        tweetCount
-        createdAt
-        followersCount
-        followingCount
-      }
+    fetchUserDetailsWithEmail(email: $email) {
+      name
+      username
+      profileImageUrl
+      banner
+      blue
+      tweetCount
+      createdAt
+      followersCount
+      followingCount
     }
+  }
   `
   const { data }: { data: any } = useSuspenseQuery(query, { variables: { email } })
   console.log(data)

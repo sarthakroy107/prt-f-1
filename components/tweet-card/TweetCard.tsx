@@ -36,7 +36,7 @@ const TweetCard = ({tweet}: {tweet: any}) => {
           isLiked: false,
           likeCount: tweetDetails.likeCount-1,
         })
-        const response = await axios({
+        await axios({
           method: 'put',
           url: "http://localhost:8000/api/v1/unlike-tweet",
           data: {
@@ -86,15 +86,15 @@ const TweetCard = ({tweet}: {tweet: any}) => {
   return (
     <div className="w-full border-b border-white/25 flex ">
         <div className="p-3 w-[13%]">
-          <Image className="w-12 h-12 object-cover rounded-full" src={tweet.author.profileImageUrl} width={200} height={200} alt="profile image"/>
+          <Image className="w-12 h-12 object-cover rounded-full" src={tweet.author_id.profileImageUrl} width={200} height={200} alt="profile image"/>
         </div>
         
         <div className="w-[87%] py-2">
           <div className="text-slate-500/75 font-medium">
-            <span className="font-semibold text-white">{tweet.author.name}</span> @{tweet.author.username}
+            <span className="font-semibold text-white">{tweet.author_id.name}</span> @{tweet.author_id.username}
           </div>
           <div>
-            {tweet.body}
+            {tweet.text}
           </div>
           <div className={`w-5/6 grid grid-cols-2 grid-rows-2 gap-1 rounded-2xl overflow-hidden
           ${ tweet.files.length > 0 ? "mt-3" : "" }`}>

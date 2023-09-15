@@ -18,7 +18,6 @@ const page = () => {
     )
   }
 
-  
   return (
     <section className="flex gap-2 pb-2" >
       {
