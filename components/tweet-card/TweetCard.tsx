@@ -18,11 +18,11 @@ interface tweetDetailsType {
 const TweetCard = ({tweet}: {tweet: any}) => {
   console.log(tweet);
   const [tweetDetails, setTweetDetails] = useState<tweetDetailsType>({
-    isLiked: tweet.isLiked,
-    likeCount: tweet.likeCount,
-    retweetCount: tweet.retweetCount,
-    replyCount: tweet.replyCount,
-    viewsCount: tweet.viewsCount
+    isLiked: tweet.is_liked,
+    likeCount: tweet.like_count,
+    retweetCount: tweet.retweet_count,
+    replyCount: tweet.reply_count,
+    viewsCount: tweet.views_count
 
   });
   const cookie = useCookies();
@@ -84,14 +84,14 @@ const TweetCard = ({tweet}: {tweet: any}) => {
   }
 
   return (
-    <div className="w-full border-b border-white/25 flex ">
+    <div className="w-full flex ">
         <div className="p-3 w-[13%]">
-          <Image className="w-12 h-12 object-cover rounded-full" src={tweet.author_id.profileImageUrl} width={200} height={200} alt="profile image"/>
+          <Image className="w-12 h-12 object-cover rounded-full" src={tweet.author_profile_image} width={200} height={200} alt="profile image"/>
         </div>
         
         <div className="w-[87%] py-2">
           <div className="text-slate-500/75 font-medium">
-            <span className="font-semibold text-white">{tweet.author_id.name}</span> @{tweet.author_id.username}
+            <span className="font-semibold text-white">{tweet.author_display_name}</span> @{tweet.author_username}
           </div>
           <div>
             {tweet.text}

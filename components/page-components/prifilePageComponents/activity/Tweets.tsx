@@ -9,24 +9,21 @@ const Tweets = () => {
     const query = gql`
       query Query {
         fetchUserTweets {
-          isLiked
-          likeCount
-          _id   
-          text
-          createdAt
-          files
-          viewsCount
-          retweetCount
-          replyCount
-          author_id {
-            blue
-            name
-            username
-            profileImageUrl
-          }
-        }
+        is_liked
+        like_count
+        _id   
+        text
+        created_at
+        files
+        views_count
+        retweet_count
+        reply_count
+        author_display_name
+        author_profile_image
+        author_username
       }
-    `
+    }
+  `
     const [tweetArr, setTweetArr] = useState(null);
 
     const { data }: {data: any} = useSuspenseQuery(query)
@@ -52,7 +49,7 @@ const Tweets = () => {
     {
       //@ts-ignore
       tweetArr.map((tweet, index)=> (
-       <TweetCard key={index} tweet={tweet}/>
+        <div className="border-b border-white/25" key={index}><TweetCard tweet={tweet}/></div>
       ))
     }
    </>
