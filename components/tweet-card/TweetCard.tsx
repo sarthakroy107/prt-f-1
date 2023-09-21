@@ -22,7 +22,7 @@ const TweetCard = ({tweet}: {tweet: any}) => {
     likeCount: tweet.like_count,
     retweetCount: tweet.retweet_count,
     replyCount: tweet.reply_count,
-    viewsCount: tweet.views_count
+    viewsCount: tweet.views_count 
 
   });
   const cookie = useCookies();
