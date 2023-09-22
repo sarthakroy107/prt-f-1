@@ -39,6 +39,7 @@
     "react-icons": "^4.10.1",
     "react-loader-spinner": "^5.4.5",
     "react-redux": "^8.1.2",
+    "socket.io-client": "^4.7.2",
     "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
