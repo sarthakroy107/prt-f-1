@@ -28,7 +28,7 @@ const page = () => {
       }
     }
   `
-  const [conversations, setConversation] = useState<conversationTypeDef | null>(null)
+  const [conversations, setConversation] = useState<conversationTypeDef[] | null>(null)
 
   const { data } = useSuspenseQuery(query)
   //@ts-ignore
@@ -48,7 +48,11 @@ const page = () => {
       <div className="w-full bg-black  backdrop-blur-sm p-4 px-9 text-3xl font-bold sticky top-0 z-10">
         Messages
       </div>
-      <Conversations conversation={conversations}/>
+      {
+        conversations.map((conversation, index)=> (
+          <Conversations key={index} conversation={conversation}/>
+        ))
+      }
     </>
   )
 }

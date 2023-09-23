@@ -2,10 +2,12 @@
 import { formatTimeAgo } from "@/services/timeFormat"
 import { conversationTypeDef } from "@/services/typeDefs"
 import Image from "next/image"
+import Link from "next/link"
 
 const Conversations = ({conversation}: {conversation: conversationTypeDef}) => {
   return (
-    <div className="w-full border-b border-white/20 p-3 flex hover:bg-slate-50/10 transition-all duration-200">
+    <Link href={`/messages/${conversation.conversation_id}`}>
+      <div className="w-full border-b border-white/20 p-3 flex hover:bg-slate-50/10 transition-all duration-200 cursor-pointer">
         <div className="w-[15%] px-1">
             <Image
             width={150}
@@ -27,7 +29,8 @@ const Conversations = ({conversation}: {conversation: conversationTypeDef}) => {
             }
            </p>
         </div>
-    </div>
+      </div>
+    </Link>
   )
 }
 
