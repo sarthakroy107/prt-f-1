@@ -2,8 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/no-unescaped-entities */
 "use client"
-import axios from 'axios';
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react';
 import { ZodType, z } from 'zod';
@@ -15,11 +14,6 @@ import { FaGithub, FaSpotify } from "react-icons/fa"
 import { useCookies } from 'next-client-cookies';
 export const dynamic = "force-dynamic";
 
-type AuthObjFields = {
-  email: string,
-  password: string
-  username: string
-}
 type formData = {
   name: string,
   username: string,
@@ -44,8 +38,6 @@ export default function Page() {
 
   const { register, handleSubmit, watch } = useForm<formData>({ resolver: zodResolver(schema) })
 
-  // const { data: session } = useSession();
-  // const [authObj, setAuthObj] = useState<AuthObjFields>({ email: "", password: "", username: "" });
   const [usernameAvailable, setUsernameAvailable] = useState<boolean>(false);
   const getUsername = watch("username")
 

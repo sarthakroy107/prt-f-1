@@ -50,12 +50,14 @@ const UsernameCheck = ({username, setValue}: {username: string, setValue: Dispat
   }
 
   return (
-    <button disabled={username === undefined || username.length === 0 || username.includes(" ") || username.includes("@") || username.includes("#") || username.includes("!")
+    <button 
+    disabled={
+       username === undefined || username.length === 0  || username.includes(" ") || username.includes("@") || username.includes("#") || username.includes("!")
     || username.includes("$") || username.includes("%") || username.includes("^") || username.includes("&") || username.includes("*") || username.includes("(")
     || username.includes(")") || username.includes("+") || username.includes("=") || username.includes("`") || username.includes("~") || username.includes("[")
     || username.includes("]") || username.includes("{") || username.includes("}") || username.includes("|") || username.includes(";") || username.includes(":")} 
     className={`border border-white p-2 px-3 rounded-md
-    ${username === undefined || username.length === 0 || username.includes(" ") || username.includes("@") || username.includes("#") || username.includes("!")
+    ${username === undefined  || username.length === 0  || username.includes(" ") || username.includes("@") || username.includes("#") || username.includes("!")
     || username.includes("$") || username.includes("%") || username.includes("^") || username.includes("&") || username.includes("*") || username.includes("(")
     || username.includes(")") || username.includes("+") || username.includes("=") || username.includes("`") || username.includes("~") || username.includes("[")
     || username.includes("]") || username.includes("{") || username.includes("}") || username.includes("|") || username.includes(";") || username.includes(":") 
