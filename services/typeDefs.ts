@@ -12,16 +12,13 @@ export interface conversationTypeDef {
 }
 
 export interface chatObjectTypeDef {
-
   _id:                   string;
   sender_id:             string;
-  text:                  string   | null;
+  text:                  string | null;
   files:                 string[] | null;
-  created_at:            Date     | string;
+  created_at:            string;
 }
-
-export interface chatDetailsTypeDef {
-  
+export interface chat_sender_TypeDef {
   conversation_id:       string;
   to_user_id:            string;
   to_user_display_name:  string;
@@ -29,5 +26,4 @@ export interface chatDetailsTypeDef {
   to_user_blue:          boolean;
   to_user_username:      string;
   from_user_id:          string;
-  chats:                 chatObjectTypeDef[];
 }

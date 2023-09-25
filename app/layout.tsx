@@ -1,8 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import {AiFillHome} from 'react-icons/ai'
-import { IconType } from 'react-icons'
 import ReduxProvider from '@/redux/provider'
 import NextAuthProviders from './_lib/nextAuthProvider/provider'
 import { ApolloWrapper } from '@/lib/graphql/apollo-wrapper'
