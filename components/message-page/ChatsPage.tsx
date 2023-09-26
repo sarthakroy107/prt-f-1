@@ -46,7 +46,7 @@ const ChatsPage = ({ conversationId, userId }: { conversationId: string, userId:
                 <div key={index}
                 className={`w-full p-2 px-4 flex ${chat.sender_id === userId ? "justify-end": "justify-start"}`}>
                     <div className='w-fit'>
-                        <p className={` w-fit p-1.5 px-3 rounded-full ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-md" : "bg-[#2f3237] rounded-bl-md"}`}>
+                        <p className={` w-fit max-w-5xl p-1.5 px-3 rounded-full ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-md" : "bg-[#2f3237] rounded-bl-md"}`}>
                             {chat.text}
                         </p>
                         <p className={`w-full ${chat.sender_id === userId ? "text-end" : "text-start"} text-slate-200/75 text-sm py-0.5`}>{formatTimeAgo(chat.created_at)}</p>
