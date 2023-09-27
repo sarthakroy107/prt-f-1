@@ -58,4 +58,4 @@ const ChatsPage = ({ conversationId, userId }: { conversationId: string, userId:
     )
 }
 
-export default ChatsPage
+export default ChatsPage;
