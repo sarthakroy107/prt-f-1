@@ -3,9 +3,11 @@ import { formatTimeAgo } from '@/services/timeFormat'
 import { chatObjectTypeDef } from '@/services/typeDefs'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useRef, useState } from 'react'
+import { Socket } from 'socket.io-client'
 
-const ChatsPage = ({ conversationId, userId }: { conversationId: string, userId: string }) => {
+const ChatsPage = ({ conversationId, userId, socket }: { conversationId: string, userId: string, socket: Socket }) => {
+    const dummy = useRef<HTMLSpanElement>(null)
     const [chats, setChats] = useState<chatObjectTypeDef[] | null>(null)
     const query = gql`
         query ExampleQuery($conversationId: String!) {
@@ -26,12 +28,24 @@ const ChatsPage = ({ conversationId, userId }: { conversationId: string, userId:
     })
 
     useEffect(()=>{
+        socket.on("receive_message", (data) => {
+            console.log(data)
+            //@ts-ignore
+            setChats((prev) => [...prev, data]);
+        })
+    }, [socket])
+
+    useEffect(()=>{
         if(data) {
             //@ts-ignore
             setChats(data?.userChatMessages)
         }
         console.log(chats)
     }, [data])
+
+    useEffect(()=>{
+        dummy?.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [chats])
 
     if(!chats) {
         return (
@@ -49,13 +63,17 @@ const ChatsPage = ({ conversationId, userId }: { conversationId: string, userId:
                         <p className={` w-fit max-w-5xl p-1.5 px-3 rounded-full ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-md" : "bg-[#2f3237] rounded-bl-md"}`}>
                             {chat.text}
                         </p>
-                        <p className={`w-full ${chat.sender_id === userId ? "text-end" : "text-start"} text-slate-200/75 text-sm py-0.5`}>{formatTimeAgo(chat.created_at)}</p>
+                        <p className={`w-full ${chat.sender_id === userId ? "text-end" : "text-start"} text-slate-200/75 text-sm py-0.5`}>
+                            {formatTimeAgo(chat.created_at)}
+                        </p>
                     </div>
                 </div>
             ))
-        }
+            }
+            {/* @ts-ignore */}
+            <span ref={dummy}></span>
        </>
     )
 }
 
-export default ChatsPage
+export default ChatsPage;

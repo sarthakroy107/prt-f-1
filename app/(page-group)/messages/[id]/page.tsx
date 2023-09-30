@@ -2,7 +2,6 @@
 import { chat_sender_TypeDef } from "@/services/typeDefs"
 import { gql } from "@apollo/client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
-import Image from "next/image"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2"
@@ -10,13 +9,28 @@ import { LiaImageSolid } from 'react-icons/lia'
 import { MdOutlineGifBox } from 'react-icons/md'
 import { BsEmojiSmile } from 'react-icons/bs'
 import { BiSend } from 'react-icons/bi'
+import { io } from "socket.io-client"
+import { useForm } from "react-hook-form"
+import Image from "next/image"
 import ChatsPage from "@/components/message-page/ChatsPage"
+
+interface chatInput {
+  text: string | null
+  files: File[] | null
+  conversationId: string
+  senderId: string
+}
 
 
 const Page = () => {
 
   const params = useParams()
+  const { register, handleSubmit, watch, setValue } = useForm<chatInput>()
   const [conversation, setConversation] = useState<chat_sender_TypeDef | null>(null)
+
+  const watchText = watch("text")
+  const watchFiles = watch("files")
+
   const query = gql`
     query Query($conversationId: String!) {
       specificUserConversationDetails(conversationId: $conversationId) {
@@ -34,13 +48,35 @@ const Page = () => {
     variables: {
       conversationId: params.id
       }
-    })  
-  
+  })  
+
+  const socket  = io("http://localhost:8000")
+
+  const onSubmit = async (data: chatInput) => {
+    //console.log(data)
+    try {
+      if(conversation != null) {
+        data.conversationId = conversation.conversation_id
+        data.senderId = conversation.from_user_id
+        socket.emit("send_message", data)
+        setValue("text", "")
+        data.files = null
+      }
+      else {
+        throw new Error("conversation is null")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   useEffect(()=>{
     if(data) {
       //@ts-ignore
       setConversation(data?.specificUserConversationDetails!)
+      socket.emit("join_room", conversation?.conversation_id )
+      
     }
     console.log(conversation)
   }, [data])
@@ -73,9 +109,10 @@ const Page = () => {
       </div>
     </div>
     <div className="h-[86%] overflow-auto scrollbar-hide text-white">
-      <ChatsPage userId={conversation.from_user_id} conversationId={conversation.conversation_id}/>
+      <ChatsPage userId={conversation.from_user_id} conversationId={conversation.conversation_id} socket={socket}/>
     </div>
-    <div className="sticky bottom-0 border-t border-white/30 h-[7%] gap-x-1 flex items-center px-8">
+    <form onSubmit={handleSubmit(onSubmit)}
+    className="sticky bottom-0 border-t border-white/30 h-[7%] gap-x-1 flex items-center px-8">
       <div className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150">
         <LiaImageSolid className="h-6 w-6 text-[#1d9af1] transition-all duration-150"/>
       </div>
@@ -85,15 +122,17 @@ const Page = () => {
       <div className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150">
         <BsEmojiSmile className="h-5 w-5 text-[#1d9af1] transition-all duration-150"/>
       </div>
-      <input 
+      <input {...register("text")}
       type="text" 
       placeholder="Start a new message"
       className="rounded-full p-2 px-4 bg-[#202327] outline-none w-2/3 mx-4"
       />
-      <div className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150">
-        <BiSend className="h-6 w-6 text-[#1d9af1] transition-all duration-150"/>
-      </div>
-    </div>
+      <button disabled={(watchText == null || watchText == "") && watchFiles == null}
+      
+      className={`group p-2 rounded-full transition-all duration-150 ${(watchText == null || watchText == "") && watchFiles == null ? "" : "hover:bg-[#1d9af1]/20"}`}>
+        <BiSend className={`h-6 w-6 transition-all duration-150 ${(watchText == null || watchText == "") && watchFiles == null ? "text-slate-100/50" : "text-[#1d9af1]"}`}/>
+      </button>
+    </form>
    </main>
   )
 }
