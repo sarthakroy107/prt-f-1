@@ -5,11 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { IconType } from 'react-icons'
 import { usePathname } from 'next/navigation'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useDispatch } from 'react-redux'
-import { turnNull } from '@/redux/slices/account'
 import { AppDispatch } from '@/redux/store'
 import { SidebarAccountDetailsCard } from './acoountDetails/SidebarAccountDetailsCard'
+import { useState } from 'react'
+import CreateTweetModal from '../modals/CreateTweetModal'
 
 
 const SidebarLayout = () => {
@@ -19,11 +20,7 @@ const SidebarLayout = () => {
 
     const { data: session } = useSession()
     const dispatch = useDispatch<AppDispatch>();
-
-    const handleSignOut = () => {
-      dispatch(turnNull());
-      signOut();
-    }
+    const [openModal, setOpenModal] = useState<boolean>(false)
 
   return (
     <main className=' h-full flex flex-col justify-between gap-2 py-7 sticky top-7'>
@@ -59,6 +56,11 @@ const SidebarLayout = () => {
           (<Link href={"/login"}><div>Login</div></Link>)
         }
       </div>
+      {openModal && (
+        <div className='fixed left-0 w-full h-screen top-0 bg-slate-100/20 z-20 flex justify-center'>
+          <CreateTweetModal/>
+        </div>
+      )}
     </main>
   )
 }
