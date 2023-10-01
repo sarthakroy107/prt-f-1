@@ -59,17 +59,26 @@ const Page = () => {
     
     try {
       if(conversation != null) {
+        let filesArr: string[] = [];
         if(inputFiles != null) {
-          const { data } = await supabase.storage.
-          from("project_images").  //@ts-ignore
-          upload(`images/${conversation.conversation_id}/${inputFiles.name}`, inputFiles as File)
-          console.log(data)
+          try {
+            const date: string = Date.now().toString();
+            const { data } = await supabase.storage.
+            from("project_images").  //@ts-ignore
+            upload(`images/${conversation.conversation_id}/${inputFiles.name}-${date}`, inputFiles as File)
+            console.log(data)
+            filesArr.push(`https://gpdgnvimnjscaiqmhbqr.supabase.co/storage/v1/object/public/project_images/${data!.path}`)
+          } catch (error) {
+            console.log("Error in supabase fileupload: " + error)
+          }
         }
-        // data.conversationId = conversation.conversation_id
-        // data.senderId = conversation.from_user_id
-        // socket.emit("send_message", data)
-        // setValue("text", "")
-        // data.files = null
+        data.conversationId = conversation.conversation_id
+        data.senderId = conversation.from_user_id
+        data.files = filesArr;
+        console.log(data)
+        socket.emit("send_message", data)
+        setValue("text", "")
+        data.files = null
       }
       else {
         throw new Error("conversation is null")
@@ -124,8 +133,12 @@ const Page = () => {
     className="sticky bottom-0 border-t border-white/30 h-[7%] gap-x-1 flex items-center px-8">
       <div onClick={() => {fileInputRef.current?.click(); console.log("clicked")}}
       className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150">
-        <input onChange={(e: ChangeEvent<HTMLInputElement>) => {if(e.target.files) {setInputFiles(e.target.files[0] as File); console.log(e.target.files[0])}}}
-        type="file" className="hidden" ref={fileInputRef}/>
+        <input 
+          accept=".jpg .jpeg .png .gif .webp"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {if(e.target.files) {setInputFiles(e.target.files[0] as File); console.log(e.target.files[0])}}}
+          type="file" 
+          className="hidden" 
+          ref={fileInputRef}/>
         <LiaImageSolid className="h-6 w-6 text-[#1d9af1] transition-all duration-150"/>
       </div>
       <div className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150">

@@ -3,6 +3,7 @@ import { formatTimeAgo } from '@/services/timeFormat'
 import { chatObjectTypeDef } from '@/services/typeDefs'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import Image from 'next/image'
 import React, { use, useEffect, useRef, useState } from 'react'
 import { Socket } from 'socket.io-client'
 
@@ -60,9 +61,22 @@ const ChatsPage = ({ conversationId, userId, socket }: { conversationId: string,
                 <div key={index}
                 className={`w-full p-2 px-4 flex ${chat.sender_id === userId ? "justify-end": "justify-start"}`}>
                     <div className='w-fit'>
-                        <p className={` w-fit max-w-5xl p-1.5 px-3 rounded-full ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-md" : "bg-[#2f3237] rounded-bl-md"}`}>
+                        <div className={`max-w-5xl p-1.5 px-3 rounded-xl ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-sm" : "bg-[#2f3237] rounded-bl-sm"}`}>
                             {chat.text}
-                        </p>
+                            
+                                {chat.files && chat.files.map((file, index) => (
+                                    <Image
+                                    src={file}
+                                    alt="Picture of the author"
+                                    width={500}
+                                    height={500}
+                                    className="rounded-md h-48 w-48 object-cover py-1"
+                                    key={index}
+
+                                    />
+                                ))}
+                            
+                        </div>
                         <p className={`w-full ${chat.sender_id === userId ? "text-end" : "text-start"} text-slate-200/75 text-sm py-0.5`}>
                             {formatTimeAgo(chat.created_at)}
                         </p>
