@@ -141,6 +141,7 @@ const Page = () => {
           ref={fileInputRef}/>
         <LiaImageSolid className="h-6 w-6 text-[#1d9af1] transition-all duration-150"/>
       </div>
+      
       <div className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150">
         <MdOutlineGifBox className="h-6 w-6 text-[#1d9af1] transition-all duration-150"/>
       </div>

@@ -61,20 +61,18 @@ const ChatsPage = ({ conversationId, userId, socket }: { conversationId: string,
                 <div key={index}
                 className={`w-full p-2 px-4 flex ${chat.sender_id === userId ? "justify-end": "justify-start"}`}>
                     <div className='w-fit'>
-                        <div className={`max-w-5xl p-1.5 px-3 rounded-xl ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-sm" : "bg-[#2f3237] rounded-bl-sm"}`}>
+                        <div className={` max-w-sm p-1.5 px-3 rounded-xl ${chat.sender_id === userId ? "bg-[#1d9af1] rounded-br-sm" : "bg-[#2f3237] rounded-bl-sm"}`}>
                             {chat.text}
-                            
-                                {chat.files && chat.files.map((file, index) => (
-                                    <Image
+                            {chat.files && chat.files.map((file, index) => (
+                                <Image
                                     src={file}
                                     alt="Picture of the author"
-                                    width={500}
-                                    height={500}
-                                    className="rounded-md h-48 w-48 object-cover py-1"
+                                    width={700}
+                                    height={700}
+                                    className="rounded-md object-cover py-1"
                                     key={index}
-
-                                    />
-                                ))}
+                                />
+                            ))}
                             
                         </div>
                         <p className={`w-full ${chat.sender_id === userId ? "text-end" : "text-start"} text-slate-200/75 text-sm py-0.5`}>
