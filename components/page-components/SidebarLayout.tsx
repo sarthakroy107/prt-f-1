@@ -20,7 +20,7 @@ const SidebarLayout = () => {
 
     const { data: session } = useSession()
     const dispatch = useDispatch<AppDispatch>();
-    const [openModal, setOpenModal] = useState<boolean>(false)
+    const [openModal, setOpenModal] = useState<boolean>(true)
 
   return (
     <main className=' h-full flex flex-col justify-between gap-2 py-7 sticky top-7'>

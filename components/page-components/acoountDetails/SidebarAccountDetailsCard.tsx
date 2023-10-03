@@ -8,6 +8,7 @@ import React from 'react'
 import { signOut } from 'next-auth/react'
 import { MdVerified } from 'react-icons/md'
 import { useCookies } from 'next-client-cookies'
+import { UserContext } from '@/lib/contextApi/UserContext'
 
 export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
     const cookie = useCookies();
@@ -27,29 +28,38 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
             }
         }
     `
-    const { data }: { data: any } = useSuspenseQuery(query, { variables: { email }, context: { Headers: "Hello"}})
+    const { data }: { data: any } = useSuspenseQuery(query, { variables: { email }, context: { Headers: "Hello" } })
 
     console.log(data.fetchUserDetailsWithEmail);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [user, setUser] = useState<any>({
+        name:"Xyz"
+    })
 
     const handleSignOut = () => {
         cookie.remove("token");
         signOut()
     }
 
-    useEffect(()=> {
-        const handleOutsideClick = (event:any) => {
+    useEffect(() => {
+        const handleOutsideClick = (event: any) => {
             if (isModalOpen && !event.target.closest('.modal-content')) {
-              setIsModalOpen(false)
+                setIsModalOpen(false)
             }
-          };
-          window.addEventListener('click', handleOutsideClick);
-      
-          return () => {
+        };
+        window.addEventListener('click', handleOutsideClick);
+
+        return () => {
             window.removeEventListener('click', handleOutsideClick);
-          };
+        };
     }, [isModalOpen])
+
+    // useEffect(() => {
+    //     if (data !== undefined || data !== null) {
+    //         setUser(data.fetchUserDetailsWithEmail)
+    //     }
+    // }, [data])
 
 
     if (email === null || email === undefined) {
@@ -60,8 +70,17 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
         )
     }
 
+    if (data === undefined || data === null) {
+        return (
+            <div className='p-7 bg-white'>
+                Loading...
+            </div>
+        )
+    }
+    console.log(user)
+
     return (
-        <>
+        <UserContext.Provider value={{ user }}>
             {/* <Link href={'/profile'}> */}
             <div className='w-fit p-2 flex rounded-full items-center gap-3 hover:bg-slate-100/10 transition-all duration-200'>
                 <Image className='rounded-full w-11 h-11 object-cover'
@@ -72,22 +91,22 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
                 />
                 <div className='text-sm'>
                     <div className='flex gap-1'>
-                        {data.fetchUserDetailsWithEmail.name.length > 9 ? (<>{data.fetchUserDetailsWithEmail.name.substr(0,8) +  "..."}</>) : 
-                        (<>{data.fetchUserDetailsWithEmail.name}</>)} {data.fetchUserDetailsWithEmail.blue ? (<><MdVerified className="text-blue-500"/></>) : (<></>)}
+                        {data.fetchUserDetailsWithEmail.name.length > 9 ? (<>{data.fetchUserDetailsWithEmail.name.substr(0, 8) + "..."}</>) :
+                            (<>{data.fetchUserDetailsWithEmail.name}</>)} {data.fetchUserDetailsWithEmail.blue ? (<><MdVerified className="text-blue-500" /></>) : (<></>)}
                     </div>
                     <p className='opacity-75 font-normal'>{data.fetchUserDetailsWithEmail.username}</p>
                 </div>
-                <div onClick={()=> setIsModalOpen(!isModalOpen)}
+                <div onClick={() => setIsModalOpen(!isModalOpen)}
                     className='modal-content group p-[0.30rem] px-1 rounded-full hover:bg-slate-100/20 cursor-pointer hover:backdrop-blur-md transition-all duration-50'>
                     <BsThreeDots />
                 </div>
                 <div onClick={handleSignOut} className={`modal-content fixed h-12 w-32 bottom-24 left-96 ${isModalOpen ? "visible" : "invisible"}
-              border border-white/75 flex justify-center items-center rounded-md transition-all duration-200 cursor-pointer 
-              hover:bg-slate-100/10 backdrop-blur-lg`}>
+                border border-white/75 flex justify-center items-center rounded-md transition-all duration-200 cursor-pointer 
+                hover:bg-slate-100/10 backdrop-blur-lg`}>
                     Logout
                 </div>
             </div>
             {/* </Link> */}
-        </>
+        </UserContext.Provider>
     )
 }
