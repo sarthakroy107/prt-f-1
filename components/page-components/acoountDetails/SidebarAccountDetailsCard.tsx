@@ -1,18 +1,21 @@
 "use client"
-import { gql, useMutation } from '@apollo/client'
+import { useContext, useEffect, useState } from 'react'
+import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import Image from 'next/image'
 import { BsThreeDots } from 'react-icons/bs'
-import { useEffect, useState } from 'react'
-import React from 'react'
 import { signOut } from 'next-auth/react'
 import { MdVerified } from 'react-icons/md'
 import { useCookies } from 'next-client-cookies'
 import { UserContext } from '@/lib/contextApi/UserContext'
+import { set } from 'mongoose'
 
 export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
+
+    const { setUserDetails } = useContext(UserContext);
+
     const cookie = useCookies();
-    console.log(email)
+    //console.log(email)
     const query = gql`
         query Query($email: String!) {
             fetchUserDetailsWithEmail(email: $email) {
@@ -28,14 +31,13 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
             }
         }
     `
+
     const { data }: { data: any } = useSuspenseQuery(query, { variables: { email }, context: { Headers: "Hello" } })
 
-    console.log(data.fetchUserDetailsWithEmail);
+    //console.log(data.fetchUserDetailsWithEmail);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [user, setUser] = useState<any>({
-        name:"Xyz"
-    })
+    const [user, setUser] = useState<any>(null)
 
     const handleSignOut = () => {
         cookie.remove("token");
@@ -55,11 +57,12 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
         };
     }, [isModalOpen])
 
-    // useEffect(() => {
-    //     if (data !== undefined || data !== null) {
-    //         setUser(data.fetchUserDetailsWithEmail)
-    //     }
-    // }, [data])
+    useEffect(() => {
+        if (data !== undefined || data !== null) {
+            setUser(data.fetchUserDetailsWithEmail)
+            setUserDetails(data.fetchUserDetailsWithEmail)
+        }
+    }, [data])
 
 
     if (email === null || email === undefined) {
@@ -80,7 +83,7 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
     console.log(user)
 
     return (
-        <UserContext.Provider value={{ user }}>
+        <>
             {/* <Link href={'/profile'}> */}
             <div className='w-fit p-2 flex rounded-full items-center gap-3 hover:bg-slate-100/10 transition-all duration-200'>
                 <Image className='rounded-full w-11 h-11 object-cover'
@@ -107,6 +110,6 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
                 </div>
             </div>
             {/* </Link> */}
-        </UserContext.Provider>
+        </>
     )
 }

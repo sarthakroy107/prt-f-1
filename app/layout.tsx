@@ -6,6 +6,7 @@ import NextAuthProviders from './_lib/nextAuthProvider/provider'
 import { ApolloWrapper } from '@/lib/graphql/apollo-wrapper'
 import { ClientCookiesProvider } from './_lib/client-cookie-provider/provider'
 import { cookies } from 'next/headers';
+import UserContextProvider from '@/lib/contextApi/UserContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,7 +33,9 @@ export default function RootLayout({
           <ClientCookiesProvider value={cookies().getAll()}>
             <ApolloWrapper>
               <ReduxProvider>
-                {children}
+                <UserContextProvider>
+                  {children}
+                </UserContextProvider>
               </ReduxProvider>
             </ApolloWrapper>
           </ClientCookiesProvider>

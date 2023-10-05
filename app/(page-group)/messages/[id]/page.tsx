@@ -138,7 +138,8 @@ const Page = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => { if (e.target.files) { setInputFiles(e.target.files[0] as File); console.log(e.target.files[0]) } }}
             type="file"
             className="hidden"
-            ref={fileInputRef} />
+            ref={fileInputRef} 
+          />
           <LiaImageSolid className="h-6 w-6 text-[#1d9af1] transition-all duration-150" />
         </div>
 

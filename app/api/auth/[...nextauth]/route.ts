@@ -96,11 +96,11 @@ export const authOptions: NextAuthOptions = {
 
     async signIn({user, account, profile, email, credentials}) {
 
-      console.log("User: ", user);
-      console.log("Account: ", account);
-      console.log("Profile", profile);
-      console.log("Email: ", email);
-      console.log("Credentials", credentials);
+      // console.log("User: ", user);
+      // console.log("Account: ", account);
+      // console.log("Profile", profile);
+      // console.log("Email: ", email);
+      // console.log("Credentials", credentials);
 
 
       if(account?.provider === 'google' || account?.provider === 'github' || account?.provider === 'spotify') {

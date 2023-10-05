@@ -25,7 +25,7 @@ const Conversations = ({conversation}: {conversation: conversationTypeDef}) => {
            </div>
            <p>
             {
-                conversation.latest_message_text !== null ? conversation.latest_message_text : "Message received"
+              conversation.latest_message_text !== null ? conversation.latest_message_text : "Message received"
             }
            </p>
         </div>
