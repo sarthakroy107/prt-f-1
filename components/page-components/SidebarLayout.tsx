@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
-import {sidebar_options} from '@/constants/sidebar'
-import Link from 'next/link'
-import Image from 'next/image'
+import { sidebar_options } from '@/constants/sidebar'
 import { IconType } from 'react-icons'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@/redux/store'
 import { SidebarAccountDetailsCard } from './acoountDetails/SidebarAccountDetailsCard'
-import { useState } from 'react'
+import { useContext } from 'react'
+import { UserContext } from '@/lib/contextApi/UserContext'
+import Link from 'next/link'
+import Image from 'next/image'
 import CreateTweetModal from '../modals/CreateTweetModal'
 
 
@@ -20,7 +21,8 @@ const SidebarLayout = () => {
 
     const { data: session } = useSession()
     const dispatch = useDispatch<AppDispatch>();
-    const [openModal, setOpenModal] = useState<boolean>(true)
+    const { tweetModalActive, setTweetModalActive } = useContext(UserContext)
+    console.log(tweetModalActive)
 
   return (
     <main className=' h-full flex flex-col justify-between gap-2 py-7 sticky top-7'>
@@ -46,17 +48,18 @@ const SidebarLayout = () => {
             )
           })
         }
-        <div className='w-fit mt-6 p-3 px-20 rounded-full bg-[#1d9bf0ff] cursor-pointer hover:bg-[#0D8BDF] transition-all duration-150'>
+        <div onClick={() => setTweetModalActive(true)}
+        className='w-fit mt-6 p-3 px-20 rounded-full bg-[#1d9bf0ff] cursor-pointer hover:bg-[#0D8BDF] transition-all duration-150'>
           Post
         </div>
       </div>
-      <div className=''>
+      <div>
         {
           session?.user !== null && session?.user !== undefined ? (<SidebarAccountDetailsCard email={session?.user?.email}/>) : 
           (<Link href={"/login"}><div>Login</div></Link>)
         }
       </div>
-      {openModal && (
+      {tweetModalActive && (
         <div className='fixed left-0 w-full h-screen top-0 bg-slate-100/20 z-20 flex justify-center'>
           <CreateTweetModal/>
         </div>

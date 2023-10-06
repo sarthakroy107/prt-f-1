@@ -1,6 +1,6 @@
 "use client"
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useUserContext } from '@/lib/contextApi/UserContext'
+import { UserContext, useUserContext } from '@/lib/contextApi/UserContext'
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { BsEmojiSmile } from 'react-icons/bs';
@@ -15,14 +15,32 @@ type createTweetProps = {
 }
 
 const CreateTweetModal = () => {
+  
+  const { register, handleSubmit, watch, setValue } = useForm<createTweetProps>();
+
+  const watchText: string = watch("text", "");
+  
   const user = useUserContext();
-  const { register, handleSubmit, watch, setValue } = useForm();
-  const [uploadImages, setUploadImages] = useState<File[]>([]);
-  const fileUploadRef = useRef<HTMLInputElement>(null)
+  const { tweetModalActive, setTweetModalActive } = useContext(UserContext)
+  
+  const [ uploadImages, setUploadImages ] = useState<File[]>([]);
+  const fileUploadRef = useRef<HTMLInputElement>(null);
 
-  useEffect(()=>{
+  const handleOutsideClick = (event: any) => {
+    if (tweetModalActive && !event.target.closest('.tweet-modal')) {
+      setTweetModalActive(false)
+    }
+  };
 
-  }, [uploadImages])
+  
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick);
+  
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [tweetModalActive]);
+   
 
   if( !user || !user.userDetais) {
     return (
@@ -31,8 +49,9 @@ const CreateTweetModal = () => {
   }
   
   return (
-    <div className='w-[30%] top-0 border border-white/50 px-4 pt-4 pb-2 mt-9 relative -left-16 rounded-xl h-fit bg-black text-white'>
-      <div className='p-1 hover:bg-slate-100/10 transition-all duration-75 w-fit h-fit mb-4 rounded-full cursor-pointer'>
+    <div className="tweet-modal w-[30%] top-0 border border-white/50 px-4 pt-4 pb-2 mt-9 relative -left-16 rounded-xl h-fit bg-black text-white">
+      <div onClick={() => { setTweetModalActive(false) }}
+      className='p-1 hover:bg-slate-100/10 transition-all duration-75 w-fit h-fit mb-4 rounded-full cursor-pointer'>
         <RxCross1 className="font-semibold"/>
       </div>
       <div className='flex gap-4 w-full'>
@@ -44,7 +63,11 @@ const CreateTweetModal = () => {
           alt='profile image'
         />
         <form className='w-[85%]'>
-          <textarea placeholder='What is happening?!' className='w-full bg-transparent h-56 font-normal text-md outline-none'></textarea>
+          <textarea 
+            placeholder='What is happening?!' 
+            className='w-full bg-transparent h-56 font-normal text-md outline-none' 
+            {...register("text")}
+          />
         </form>
       </div>
       {uploadImages && uploadImages.length > 0 && (
@@ -59,7 +82,7 @@ const CreateTweetModal = () => {
                 className={`rounded-[12px] object-cover w-full h-full`}
                 alt='image'
               />
-              <div className='absolute top-0 right-0 p-1 rounded-full bg-black/30 transition-all duration-75 w-fit h-fit mb-4 mr-1 mt-1 cursor-pointer'>
+              <div className='tweet-modal absolute top-0 right-0 p-1 rounded-full bg-black/30 transition-all duration-75 w-fit h-fit mb-4 mr-1 mt-1 cursor-pointer'>
                 <RxCross1 onClick = {() => {
                   setUploadImages(uploadImages.filter((_, i) => i !== index))
                 }}
@@ -100,12 +123,101 @@ const CreateTweetModal = () => {
             <BsEmojiSmile className="h-5 w-5 text-[#1d9af1] transition-all duration-150" />
           </div>
         </div>
-        <button className='px-3 p-1 rounded-full h-fit bg-[#1d9af1]'>
-          Post
-        </button>
+        <div className='flex gap-3 items-center'>
+          <p className='text-sm font-normal text-white/60'>{watchText.length}</p>
+        <button disabled={(watchText === null || watchText === "") && uploadImages.length == 0}
+          className={`px-3 p-1 rounded-full h-fit transition-all ${(watchText === null || watchText === "") && uploadImages.length == 0 ? "bg-[#1d9af1] opacity-60" : "bg-[#1d9af1]"}`}>
+            Post
+          </button>
+        </div>
       </div>
     </div>
   )
 }
 
 export default CreateTweetModal
+
+
+
+// import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support';
+
+// const QUERY = gql`
+//   mutation createUser($name: String!) {
+//     createUser(name: $name) {
+//       id
+//       name
+//     }
+//   }
+// `;
+
+// const VARIABLES = {
+//   name: 'John Doe',
+// };
+
+// const { data, loading, error } = useSuspenseQuery(QUERY, {
+//   variables: VARIABLES,
+// });
+
+// if (loading) {
+//   return <div>Loading...</div>;
+// }
+
+// if (error) {
+//   return <div>Error: {error.message}</div>;
+// }
+
+// const { createUser } = data;
+
+// const handleMutation = () => {
+//   createUser({
+//     variables: VARIABLES,
+//     onCompleted: () => {
+//       console.log('Mutation successful!');
+//     },
+//     onError: (error) => {
+//       console.log('Mutation failed!', error);
+//     },
+//   });
+// };
+
+// return (
+//   <div>
+//     <button onClick={handleMutation}>Create User</button>
+//   </div>
+// );
+
+
+
+// import { Suspense } from 'react';
+// import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support';
+
+// const MUTATION = gql`
+//   mutation UpdateUser($id: ID!, $name: String!) {
+//     updateUser(id: $id, name: $name) {
+//       id
+//       name
+//     }
+//   }
+// `;
+
+// const UpdateUser = () => {
+//   const { data } = useSuspenseQuery(MUTATION, {
+//     variables: {
+//       id: 1,
+//       name: 'New Name',
+//     },
+//   });
+
+//   if (!data) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>User updated successfully!</h1>
+//       <p>New name: {data.updateUser.name}</p>
+//     </div>
+//   );
+// };
+
+// export default UpdateUser;

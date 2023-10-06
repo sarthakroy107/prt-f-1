@@ -2,13 +2,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import Image from 'next/image'
 import { BsThreeDots } from 'react-icons/bs'
 import { signOut } from 'next-auth/react'
 import { MdVerified } from 'react-icons/md'
 import { useCookies } from 'next-client-cookies'
 import { UserContext } from '@/lib/contextApi/UserContext'
-import { set } from 'mongoose'
+import Image from 'next/image'
 
 export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
 
