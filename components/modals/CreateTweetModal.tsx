@@ -7,6 +7,10 @@ import { BsEmojiSmile } from 'react-icons/bs';
 import { LiaImageSolid } from 'react-icons/lia';
 import { MdOutlineGifBox } from 'react-icons/md';
 import { RxCross1 } from 'react-icons/rx'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import supabase from '@/lib/supabase';
+import { gql, useMutation } from '@apollo/client';
 
 type createTweetProps = {
   text: string
@@ -17,6 +21,34 @@ type createTweetProps = {
 const CreateTweetModal = () => {
   
   const { register, handleSubmit, watch, setValue } = useForm<createTweetProps>();
+  const mutation = gql`
+   mutation Mutation($text: String, $files: [String]) {
+    createTweet(text: $text, files: $files) {
+      _id
+      in_reply_to_tweet_id
+      text
+      files
+      author_id
+      likes
+      replies
+      retweets
+      quotetweets
+      hastags
+      private
+      possibly_sensitive
+      viewsCount
+      createdAt
+      updatedAt
+      in_reply
+      in_reply_to_user_id {
+          _id
+          bio
+          blue
+          name
+          username
+      }
+    }
+  }`
 
   const watchText: string = watch("text", "");
   
@@ -25,6 +57,35 @@ const CreateTweetModal = () => {
   
   const [ uploadImages, setUploadImages ] = useState<File[]>([]);
   const fileUploadRef = useRef<HTMLInputElement>(null);
+  const [createTweet] = useMutation(mutation)
+
+  const onSubmit = async (data: any) => {
+    try {
+      let filesArr: string[] = []
+      if(uploadImages.length > 0) {
+        for (const file of uploadImages) {
+          try {
+            const date: string = Date.now().toString();
+            const { data } = await supabase.storage.
+              from("project_images").  //@ts-ignore
+              upload(`images/tweets/${file.name}-${date}`, file as File)
+            console.log(data)
+            filesArr.push(`https://gpdgnvimnjscaiqmhbqr.supabase.co/storage/v1/object/public/project_images/${data!.path}`)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        data.files = filesArr
+      }
+      console.log(data)
+      createTweet({
+        variables: data
+      })
+      setTweetModalActive(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleOutsideClick = (event: any) => {
     if (tweetModalActive && !event.target.closest('.tweet-modal')) {
@@ -124,8 +185,21 @@ const CreateTweetModal = () => {
           </div>
         </div>
         <div className='flex gap-3 items-center'>
-          <p className='text-sm font-normal text-white/60'>{watchText.length}</p>
-        <button disabled={(watchText === null || watchText === "") && uploadImages.length == 0}
+        <div  className='w-7 h-7'>
+          <CircularProgressbar value={watchText.length} maxValue={180} 
+            text={`${watchText.length <160 ? "" : watchText.length > 180 ? `-${watchText.length - 180}` : `${180 - watchText.length}`}`} 
+            styles={buildStyles({
+              textSize: '36px',
+              pathColor: `${watchText.length <= 160 ? '#1d9af1' : watchText.length > 180 ? '#f5212f' : '#ffd501'}`,
+              textColor: `${watchText.length <= 160 ? '#1d9af1' : watchText.length > 180 ? '#f5212f' : '#ffd501'}`,
+              trailColor: '#d6d6d6',
+              pathTransitionDuration: 0.2,
+              backgroundColor: '#3e98c7',
+            })} 
+          />
+        </div>
+        <button onClick={handleSubmit(onSubmit)}
+          disabled={(watchText === null || watchText === "") && uploadImages.length == 0}
           className={`px-3 p-1 rounded-full h-fit transition-all ${(watchText === null || watchText === "") && uploadImages.length == 0 ? "bg-[#1d9af1] opacity-60" : "bg-[#1d9af1]"}`}>
             Post
           </button>

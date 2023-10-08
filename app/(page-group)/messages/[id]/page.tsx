@@ -56,7 +56,6 @@ const Page = () => {
   const socket = io("http://localhost:8000")
 
   const onSubmit = async (data: chatInput) => {
-
     try {
       if (conversation != null) {
         let filesArr: string[] = [];

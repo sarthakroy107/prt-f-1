@@ -4,7 +4,7 @@ import { chatObjectTypeDef } from '@/services/typeDefs'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import Image from 'next/image'
-import React, { use, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Socket } from 'socket.io-client'
 
 const ChatsPage = ({ conversationId, userId, socket }: { conversationId: string, userId: string, socket: Socket }) => {
