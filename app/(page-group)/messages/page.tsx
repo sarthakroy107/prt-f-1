@@ -46,7 +46,7 @@ const page = () => {
   return (
     <>
       <div className="w-full bg-black  backdrop-blur-sm p-4 px-9 text-3xl font-bold sticky top-0 z-10">
-        Messages
+        <p>Messages</p>
       </div>
       {
         conversations.map((conversation, index)=> (

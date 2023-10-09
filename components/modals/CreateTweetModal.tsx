@@ -20,7 +20,7 @@ type createTweetProps = {
 
 const CreateTweetModal = () => {
   
-  const { register, handleSubmit, watch, setValue } = useForm<createTweetProps>();
+  const { register, handleSubmit, watch } = useForm<createTweetProps>();
   const mutation = gql`
    mutation Mutation($text: String, $files: [String]) {
     createTweet(text: $text, files: $files) {
@@ -210,88 +210,3 @@ const CreateTweetModal = () => {
 }
 
 export default CreateTweetModal
-
-
-
-// import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support';
-
-// const QUERY = gql`
-//   mutation createUser($name: String!) {
-//     createUser(name: $name) {
-//       id
-//       name
-//     }
-//   }
-// `;
-
-// const VARIABLES = {
-//   name: 'John Doe',
-// };
-
-// const { data, loading, error } = useSuspenseQuery(QUERY, {
-//   variables: VARIABLES,
-// });
-
-// if (loading) {
-//   return <div>Loading...</div>;
-// }
-
-// if (error) {
-//   return <div>Error: {error.message}</div>;
-// }
-
-// const { createUser } = data;
-
-// const handleMutation = () => {
-//   createUser({
-//     variables: VARIABLES,
-//     onCompleted: () => {
-//       console.log('Mutation successful!');
-//     },
-//     onError: (error) => {
-//       console.log('Mutation failed!', error);
-//     },
-//   });
-// };
-
-// return (
-//   <div>
-//     <button onClick={handleMutation}>Create User</button>
-//   </div>
-// );
-
-
-
-// import { Suspense } from 'react';
-// import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support';
-
-// const MUTATION = gql`
-//   mutation UpdateUser($id: ID!, $name: String!) {
-//     updateUser(id: $id, name: $name) {
-//       id
-//       name
-//     }
-//   }
-// `;
-
-// const UpdateUser = () => {
-//   const { data } = useSuspenseQuery(MUTATION, {
-//     variables: {
-//       id: 1,
-//       name: 'New Name',
-//     },
-//   });
-
-//   if (!data) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h1>User updated successfully!</h1>
-//       <p>New name: {data.updateUser.name}</p>
-//     </div>
-//   );
-// };
-
-// export default UpdateUser;
