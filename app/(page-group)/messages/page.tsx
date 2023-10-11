@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import Conversations from "@/components/message-page/Conversations";
-import { conversationTypeDef } from "@/services/typeDefs";
+import { autocomplete_search_results, conversationTypeDef } from "@/services/typeDefs";
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { RiMailAddLine } from "react-icons/ri";
 import debounce from "lodash.debounce";
+import SeachAndHoverAccount from "@/components/modals/SeachAndHoverAccount";
+
 
 const socket = io("http://localhost:8000")
 
@@ -34,14 +36,16 @@ const page = () => {
   const [conversations, setConversation] = useState<conversationTypeDef[] | null>(null)
   const [searchbarVisible, setSearchbarVisible] = useState<boolean>(true)
   const [searchString, setSearchString] = useState<string>("")
+  const [searchAutoResults, setAutoSearchResults] = useState<autocomplete_search_results[] | null>(null)
   
-  let count = 0;
-  socket.on("autocomplete_profile_search_results", (data: any) => {
-    console.log(data)
+  socket.on("autocomplete_profile_search_results", (data: autocomplete_search_results[] | null) => {
+    if(data !== null ) setAutoSearchResults(data);
   })
   const getResults = debounce((searchString: string) => {
     console.log(searchString)
-    socket.emit("autocomplete_profile_search", searchString)
+    if(searchString.length > 2) {
+      socket.emit("autocomplete_profile_search", {searchString})
+    }
   }, 500)
   const debounceRequest = useCallback((searchString: string)=> {
     getResults(searchString)
@@ -72,8 +76,21 @@ const page = () => {
            <div className="relative">
               <input placeholder="Search" onChange={onChange} value={searchString}
               className="w-56 bg-[#212227] p-2 px-3 h-9 text-sm font-normal opacity-80 rounded-full outline-none"/>
-              <div className="w-96 h-56 mt-3 bg-black  absolute rounded-xl -left-40 border border-[#1d9bf0]/80">
-              </div>
+              {
+                searchString.length > 2 ? (
+                  <div className="w-80 max-h-64 mt-3 bg-black  absolute rounded-xl -left-24 border border-[#1d9bf0]/80 overflow-auto">
+                    {
+                      searchAutoResults && searchAutoResults.length > 0 ?  searchAutoResults.map((result, index) => (
+                        <SeachAndHoverAccount key={index} details={result} bio={false} />
+                      )) : (
+                        <div className="w-full h-full flex justify-center items-center py-1">
+                          <i className="text-white/75 text-lg">No results found</i>
+                        </div>
+                      )
+                    }
+                  </div>
+                ) : null
+              }
            </div>
           ) : (
             <div onClick={() => setSearchbarVisible(true)}

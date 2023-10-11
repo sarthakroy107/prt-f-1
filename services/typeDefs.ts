@@ -27,3 +27,13 @@ export interface chat_sender_TypeDef {
   to_user_username:      string;
   from_user_id:          string;
 }
+
+export type autocomplete_search_results = {
+  _id: string
+  name: string
+  profileImageUrl: string
+  blue: string
+  username: string
+  bio?: string
+  following?: boolean
+}
