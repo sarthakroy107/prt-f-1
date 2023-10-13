@@ -20,6 +20,7 @@ interface chatInput {
   files: string[] | null
   conversationId: string
   senderId: string
+  to_user_id: string
 }
 
 
@@ -35,8 +36,8 @@ const Page = () => {
   const watchFiles = watch("files")
 
   const query = gql`
-    query Query($conversationId: String!) {
-      specificUserConversationDetails(conversationId: $conversationId) {
+    query Query($toUsername: String!) {
+      specificUserConversationDetails(to_username: $toUsername) {
         conversation_id
         to_user_id
         to_user_display_name
@@ -49,11 +50,22 @@ const Page = () => {
   `
   const { data } = useSuspenseQuery(query, {
     variables: {
-      conversationId: params.id
+      toUsername: params.id
     }
-  })
+  });
 
-  const socket = io("http://localhost:8000")
+  const socket = io("http://localhost:8000");
+  
+  socket.on("conversation_created", (data: string) => {
+    console.log(data);
+    setConversation((prev)=> {
+      return {
+        ...prev!,
+        conversation_id: data!
+      }
+    })
+    socket.emit("join_room", data)
+  })
 
   const onSubmit = async (data: chatInput) => {
     try {
@@ -71,13 +83,14 @@ const Page = () => {
             console.log("Error in supabase fileupload: " + error)
           }
         }
-        data.conversationId = conversation.conversation_id
-        data.senderId = conversation.from_user_id
+        data.conversationId = conversation.conversation_id;
+        data.senderId = conversation.from_user_id;
+        data.to_user_id = conversation.to_user_id;
         data.files = filesArr;
-        console.log(data)
+        console.log(data);
         socket.emit("send_message", data)
         setValue("text", "")
-        data.files = null
+        data.files = null;
       }
       else {
         throw new Error("conversation is null")
@@ -92,8 +105,7 @@ const Page = () => {
     if (data) {
       //@ts-ignore
       setConversation(data?.specificUserConversationDetails!)
-      socket.emit("join_room", conversation?.conversation_id)
-
+      if(conversation?.conversation_id !== null ) socket.emit("join_room", conversation?.conversation_id)
     }
     console.log(conversation)
   }, [data])
@@ -126,7 +138,11 @@ const Page = () => {
         </div>
       </div>
       <div className="h-[86%] overflow-auto scrollbar-hide text-white">
-        <ChatsPage userId={conversation.from_user_id} conversationId={conversation.conversation_id} socket={socket} />
+        {
+          conversation.conversation_id ? (
+            <ChatsPage userId={conversation.from_user_id} conversationId={conversation.conversation_id} socket={socket} />
+          ) : null
+        } 
       </div>
       <form onSubmit={handleSubmit(onSubmit)}
         className="sticky bottom-0 border-t border-white/30 h-[7%] gap-x-1 flex items-center px-8">

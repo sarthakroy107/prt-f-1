@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer components {
+  .header-card {
+    @apply hover:bg-slate-100/20 w-full pt-2 transition-all duration-75 flex justify-center bg-slate-300/5 text-slate-300/75 cursor-pointer;
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

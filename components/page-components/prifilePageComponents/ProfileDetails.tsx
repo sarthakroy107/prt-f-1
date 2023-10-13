@@ -93,12 +93,11 @@ const ProfileDetails = ({email}:{email: string}) => {
           {
             options.map((option, index)=>(
               <div onClick={()=> setOpt(option.id)}
-              className="hover:bg-slate-100/20 w-full pt-2 transition-all duration-5s0 flex justify-center 
-              bg-slate-300/5 text-slate-300/75 cursor-pointer" key={index}>
-                <p>
+              className="header-card" key={index}>
+                <div>
                   {option.name}
                   <div className={`w-full h-[0.20rem] mt-2 ${opt === option.id ? "bg-blue-500" : ""} rounded-md`}></div>
-                </p>
+                </div>
               </div>
             ))
           }

@@ -1,4 +1,5 @@
 "use client";
+import { conversationTypeDef } from "@/services/typeDefs";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 
@@ -7,9 +8,10 @@ export const UserContext = createContext<any>(null);
 export default function UserContextProvider({children} : {children: ReactNode}): ReactNode {
     const [userDetais, setUserDetails] = useState(null);
     const [tweetModalActive, setTweetModalActive] = useState(false);
+    const [conversationsContext, setConversationsContext] = useState<any[] | null>(null)
     
     return (
-        <UserContext.Provider value={{userDetais, tweetModalActive, setUserDetails, setTweetModalActive}}>
+        <UserContext.Provider value={{userDetais, tweetModalActive, conversationsContext, setUserDetails, setTweetModalActive, setConversationsContext}}>
             {children}
         </UserContext.Provider>
     )

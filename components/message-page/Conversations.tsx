@@ -6,7 +6,7 @@ import Link from "next/link"
 
 const Conversations = ({conversation}: {conversation: conversationTypeDef}) => {
   return (
-    <Link href={`/messages/${conversation.conversation_id}`}>
+    <Link href={`/messages/${conversation.to_user_username}`}>
       <div className="w-full border-b border-white/20 p-3 flex hover:bg-slate-50/10 transition-all duration-200 cursor-pointer">
         <div className="w-[15%] px-1">
             <Image

@@ -28,20 +28,23 @@ const ChatsPage = ({ conversationId, userId, socket }: { conversationId: string,
         }
     })
 
-    useEffect(()=>{
+
+    useEffect(()=> {
         socket.on("receive_message", (data) => {
-            console.log(data)
-            //@ts-ignore
-            setChats((prev) => [...prev, data]);
+            console.log("message received")
+            setChats((prev) => [...prev!, data]);
         })
-    }, [socket])
+
+        return () => {
+            socket.off("receive_message")
+        }
+    }, [])
 
     useEffect(()=>{
         if(data) {
             //@ts-ignore
             setChats(data?.userChatMessages)
         }
-        console.log(chats)
     }, [data])
 
     useEffect(()=>{

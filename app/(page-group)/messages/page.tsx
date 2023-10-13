@@ -4,11 +4,12 @@ import Conversations from "@/components/message-page/Conversations";
 import { autocomplete_search_results, conversationTypeDef } from "@/services/typeDefs";
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, use, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { RiMailAddLine } from "react-icons/ri";
 import debounce from "lodash.debounce";
 import SeachAndHoverAccount from "@/components/modals/SeachAndHoverAccount";
+import { UserContext, useUserContext } from "@/lib/contextApi/UserContext";
 
 
 const socket = io("http://localhost:8000")
@@ -37,6 +38,9 @@ const page = () => {
   const [searchbarVisible, setSearchbarVisible] = useState<boolean>(true)
   const [searchString, setSearchString] = useState<string>("")
   const [searchAutoResults, setAutoSearchResults] = useState<autocomplete_search_results[] | null>(null)
+
+  const user = useUserContext()
+  console.log(user)
   
   socket.on("autocomplete_profile_search_results", (data: autocomplete_search_results[] | null) => {
     if(data !== null ) setAutoSearchResults(data);
@@ -53,14 +57,19 @@ const page = () => {
 
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //console.log(e.target.value)
     setSearchString(e.target.value)
     debounceRequest(e.target.value)
   }
 
   useEffect(() => {
-    //@ts-ignore
-    if(data) setConversation(data.userChats);
+    if(data) {
+      //@ts-ignore
+      console.log(data.userChats)
+      //@ts-ignore
+      setConversation(data.userChats);
+      //@ts-ignore
+      console.log(data.userChats)
+    }
   }, [data])
 
   if(!conversations) {
