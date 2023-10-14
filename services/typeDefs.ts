@@ -37,3 +37,30 @@ export type autocomplete_search_results = {
   bio?: string
   following?: boolean
 }
+
+
+export type  responseTweetDetailsType = {
+  _id:                  string;
+  author_display_name:  string;
+  author_username:      string;
+  author_profile_image: string;
+  text:                 string   | null;
+  files:                string[] | null;
+  is_liked:             boolean;
+  like_count:           number;
+  is_retweeted:         boolean;
+  retweet_count:        number;
+  quotetweet_count:     number;
+  reply_count:          number;
+  is_sensitive:         boolean;
+  in_reply:             boolean;
+  in_reply_to_tweet_id: string   | null;
+  in_reply_to_user_id:  string   | null;
+  in_reply_to_username: string;
+  created_at:           Date     | string;
+  updated_at:           Date     | string;
+  views_count:          number;
+  is_following:        boolean;
+  is_bookmarked:       boolean;
+  bookmark_count:      number;
+}

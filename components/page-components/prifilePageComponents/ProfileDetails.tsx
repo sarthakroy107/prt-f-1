@@ -37,7 +37,7 @@ const ProfileDetails = ({email}:{email: string}) => {
   return (
     <main className='w-full'>
       <div className='flex gap-3 items-center w-full p-2 sticky top-0 bg-black/70 backdrop-blur-md z-10'>
-        <div className="p-1 rounded-full hover:bg-slate-100/10 w-fit transition-all duration-100 cursor-pointer">
+        <div className="icon-hover">
           <HiOutlineArrowSmallLeft className="text-2xl"/>
         </div>
         <div className=''>

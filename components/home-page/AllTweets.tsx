@@ -3,6 +3,7 @@
 import TweetCard from "@/components/tweet-card/TweetCard"
 import { gql } from "@apollo/client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const Tweets = () => {
@@ -50,7 +51,9 @@ const Tweets = () => {
     {
       //@ts-ignore
       tweetArr.map((tweet, index)=> (
-        <div className="border-b border-white/25" key={index}><TweetCard tweet={tweet}/></div>
+        <Link href={`/${tweet.author_username}/${tweet._id}`} key={index}>
+            <TweetCard tweet={tweet}/>
+        </Link>
       ))
     }
    </>
