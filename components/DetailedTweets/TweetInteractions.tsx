@@ -122,4 +122,5 @@ const TweetInteractions = ({tweet}: {tweet: responseTweetDetailsType}) => {
   )
 }
 
+
 export default TweetInteractions
