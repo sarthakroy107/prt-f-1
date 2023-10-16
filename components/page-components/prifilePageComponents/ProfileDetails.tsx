@@ -27,7 +27,6 @@ const ProfileDetails = ({email}:{email: string}) => {
   }
   `
   const { data }: { data: any } = useSuspenseQuery(query, { variables: { email } })
-  console.log(data)
 
   const [opt, setOpt] = useState(1)
 

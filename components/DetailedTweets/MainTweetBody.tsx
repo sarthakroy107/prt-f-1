@@ -57,7 +57,7 @@ const MainTweetBody = ({tweetDetails}:{tweetDetails: responseTweetDetailsType}) 
           <p className="text-white font-semibold">{tweetDetails.views_count}</p>
           views
         </div>
-        <TweetInteractions tweet={tweetDetails} />
+        <TweetInteractions tweet={tweetDetails} detailed={true} />
       </div>
     </>
   )
