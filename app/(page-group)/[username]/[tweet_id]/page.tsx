@@ -59,7 +59,7 @@ const TweetDetails = () => {
 
   return (
     <main className="w-full">
-      <div className="h-[3.5rem] flex items-center px-3 gap-3 bg-black/75 backdrop-blur-sm sticky top-0">
+      <div className="h-[3.5rem] flex items-center px-3 gap-3 bg-black/75 backdrop-blur-sm sticky top-0 z-10">
         <div className="icon-hover">
           <HiOutlineArrowSmallLeft className="text-2xl"/>
         </div>

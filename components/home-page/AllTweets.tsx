@@ -7,7 +7,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const Tweets = () => {
-    const query = gql`
+  const query = gql`
       query Query {
         fetchAllTweets {
             is_liked
@@ -18,6 +18,7 @@ const Tweets = () => {
             files
             views_count
             retweet_count
+            quotetweet_count
             reply_count
             author_display_name
             author_profile_image
@@ -25,38 +26,36 @@ const Tweets = () => {
         }
     }
   `
-    const [tweetArr, setTweetArr] = useState(null);
+  const [tweetArr, setTweetArr] = useState(null);
 
-    const { data }: {data: any} = useSuspenseQuery(query)
+  const { data }: { data: any } = useSuspenseQuery(query)
 
-    console.log(data)
+  console.log(data)
 
-    useEffect(()=>{
+  useEffect(() => {
 
-      if(data !== null) {
-        console.log(data)
-        setTweetArr(data.fetchAllTweets)
-      }
-      console.log(tweetArr)
-    }, [data])
-    
-  if(tweetArr === null || tweetArr === undefined) {
+    if (data !== null) {
+      console.log(data)
+      setTweetArr(data.fetchAllTweets)
+    }
+    console.log(tweetArr)
+  }, [data])
+
+  if (tweetArr === null || tweetArr === undefined) {
     return (
       <>Loading...</>
     )
   }
-  
+
   return (
-   <>
-    {
-      //@ts-ignore
-      tweetArr.map((tweet, index)=> (
-        <Link href={`/${tweet.author_username}/${tweet._id}`} key={index}>
-            <TweetCard tweet={tweet}/>
-        </Link>
-      ))
-    }
-   </>
+    <>
+      {
+        //@ts-ignore
+        tweetArr.map((tweet, index) => (
+          <TweetCard key={index} tweet={tweet} start={true} end={true} />
+        ))
+      }
+    </>
   )
 }
 

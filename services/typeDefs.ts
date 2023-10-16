@@ -45,7 +45,7 @@ export type  responseTweetDetailsType = {
   author_username:      string;
   author_profile_image: string;
   text:                 string   | null;
-  files:                string[] | null;
+  files:                string[];
   is_liked:             boolean;
   like_count:           number;
   is_retweeted:         boolean;

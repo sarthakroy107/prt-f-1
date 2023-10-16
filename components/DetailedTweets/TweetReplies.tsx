@@ -87,7 +87,7 @@ const Replies = ({ reply_details, start, end }: { reply_details: responseTweetDe
       </div>
       <div className={`w-full grid grid-cols-10 auto-rows-fr px-2 ${end ? "border-b border-white/20 pb-1" : ""}`}>
         <div className='h-full relative flex justify-center'>
-          <Image src={reply_details.author_profile_image} width={50} height={50} alt='img' className='h-12 w-12 rounded-full object-cover absolute'/>
+          <Image src={reply_details.author_profile_image} width={50} height={50} alt='img' className='h-12 w-12 rounded-full object-cover absolute z-0'/>
           <div className={`h-full ${!end ? "bg-[#323739] w-1" : ""}`}></div>
         </div>
         <div className='col-span-9'>

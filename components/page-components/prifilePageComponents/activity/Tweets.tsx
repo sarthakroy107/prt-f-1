@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import TweetCard from "@/components/tweet-card/TweetCard"
+import { responseTweetDetailsType } from "@/services/typeDefs"
 import { gql } from "@apollo/client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
+import { responseEncoding } from "axios"
 import { useEffect, useState } from "react"
 
 const Tweets = () => {
@@ -17,6 +19,7 @@ const Tweets = () => {
         files
         views_count
         retweet_count
+        quotetweet_count
         reply_count
         author_display_name
         author_profile_image
@@ -24,7 +27,7 @@ const Tweets = () => {
       }
     }
   `
-    const [tweetArr, setTweetArr] = useState(null);
+    const [tweetArr, setTweetArr] = useState< responseTweetDetailsType[] | null >(null);
 
     const { data }: {data: any} = useSuspenseQuery(query)
 
@@ -47,9 +50,9 @@ const Tweets = () => {
   return (
    <>
     {
-      //@ts-ignore
-      tweetArr.map((tweet, index)=> (
-        <div className="border-b border-white/25" key={index}><TweetCard tweet={tweet}/></div>
+      tweetArr &&
+      tweetArr.map((tweet: responseTweetDetailsType, index: number)=> (
+        <TweetCard key={index} tweet={tweet} start={true} end={true}/>
       ))
     }
    </>
