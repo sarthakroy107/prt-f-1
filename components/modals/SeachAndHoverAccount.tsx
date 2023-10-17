@@ -1,4 +1,4 @@
-import { autocomplete_search_results } from "@/services/typeDefs";
+import { autocomplete_search_results, responseTweetDetailsType } from "@/services/typeDefs";
 import Image from "next/image";
 import Link from "next/link";
 

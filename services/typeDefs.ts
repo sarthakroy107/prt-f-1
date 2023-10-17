@@ -32,7 +32,7 @@ export type autocomplete_search_results = {
   _id: string
   name: string
   profileImageUrl: string
-  blue: string
+  blue: boolean
   username: string
   bio?: string
   following?: boolean

@@ -1,14 +1,39 @@
 "use client"
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import TweetInteractions from '../DetailedTweets/TweetInteractions'
 import { formatTimeAgo } from '@/services/timeFormat'
 import { responseTweetDetailsType } from '@/services/typeDefs'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { gql } from '@apollo/client'
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+
+type extraUserDetailsType = {
+  extraUserDetails: {
+    bio: string | null;
+    followingCount: number;
+    followersCount: number;
+  }
+}
 
 const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, start: boolean, end:boolean}) => {
-  console.log(tweet, start, end)
+  
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [y, setY] = useState<number>(0)
+  const handleMouseEnter = (e: any) => {
+    setY(e.clientY)
+    setModalOpen(true)
+  }
+  const handleMouseLeave = (e: any) => {
+    setModalOpen(false)
+  }
+  const handleModalHover = () => {
+    setModalOpen(true)
+  }
+  const handleModalOut = () => {
+    setModalOpen(false)
+  }
+
 
   return (
     <Link href={`/${tweet.author_username}/${tweet._id}`} className='hover:bg-white/5 transition-all'>
@@ -24,8 +49,13 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
           <div className={`h-full ${!end ? "bg-[#323739] w-1" : ""}`}></div>
         </div>
         <div className='col-span-9'>
-          <div className='flex gap-x-2 pl-2'>
-            <p className='font-semibold'>{tweet.author_display_name}</p>
+          <div className='flex gap-x-2 pl-2 relative'>
+            {modalOpen && (
+            <div onMouseOver={handleModalHover} onMouseOut={handleModalOut} onClick={(e)=>{e.preventDefault()}}
+            className={`bg-black border border-blue-500/50 w-72 p-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-[0.95rem] absolute z-10 ${ y > 150 ? "-top-44" : "top-9"}`}>
+              <AcoountDetailsModal tweet={tweet} y={y} />
+            </div>)}
+            <p onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave} className='font-semibold h-3'>{tweet.author_display_name}</p>
             <p className='opacity-80'>@{tweet.author_username}</p>
             &middot;
             <p className='opacity-60'>{formatTimeAgo(tweet.created_at)}</p>
@@ -53,6 +83,56 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
         </div>
       </div>
     </Link>
+  )
+}
+
+const AcoountDetailsModal = ({tweet, y}: {tweet: responseTweetDetailsType, y: number}) => {
+
+  const query = gql`
+    query Query($username: String!) {
+      extraUserDetails(username: $username) {
+        bio
+        followersCount
+        followingCount
+      }
+    }
+  `
+  const { data }: { data: extraUserDetailsType | undefined | null } =  useSuspenseQuery(query, { variables: { username: tweet.author_username } })
+
+  console.log(data)
+
+  if(data === null || data === undefined) {
+    return <div>Loading...</div>
+  }
+  return (
+    <>
+      <div className='w-full flex gap-x-4 mb-5'>
+        <Link href={`/${tweet.author_username}`}>
+          <Image src={tweet.author_profile_image} width={50} height={50} alt='image' className='h-14 w-14 rounded-full object-cover'/>
+        </Link>
+        <Link href={`/${tweet.author_username}`}>
+          <p className='text-lg font-bold'>{tweet.author_display_name}</p>
+          <p className='opacity-75'>@{tweet.author_username}</p>
+        </Link>
+      </div>
+      {
+        data === null || data === undefined ? (<div>Loading</div>) : (
+        <>
+          {
+            data.extraUserDetails.bio !== null && (
+              <p className='w-full h-10'>
+                {data.extraUserDetails.bio.length > 45 ? data.extraUserDetails.bio.slice(0, 45) + "..." : data.extraUserDetails.bio}
+              </p>
+            )
+          }
+          <div className='flex gap-x-3 opacity-60'>
+            <p>Followers: {data.extraUserDetails.followersCount}</p>
+            <p>Following: {data.extraUserDetails.followingCount}</p>
+          </div>
+        </>
+        )
+      }
+    </>
   )
 }
 
