@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext, useUserContext } from '@/lib/contextApi/UserContext'
@@ -101,7 +102,6 @@ const CreateTweetModal = () => {
     return () => {
       document.removeEventListener('click', handleOutsideClick);
     };
-
   }, [tweetModalActive]);
    
 

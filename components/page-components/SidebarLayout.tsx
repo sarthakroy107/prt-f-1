@@ -23,19 +23,19 @@ const SidebarLayout = () => {
 
   const handlePayment = async (e: any) => {
     e.preventDefault();
-    // console.log("Payment")
-    // const { data } = await axios.post('http://localhost:8000/api/v1/payment',
-    // {
-    //   priceId: 69420.00,
-    // },
-    // {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // }
-    // );
-    // console.log(data)
-    // window.location.assign(data.url)
+    console.log("Payment")
+    const { data } = await axios.post('http://localhost:8000/api/v1/payment',
+    {
+      priceId: 69420.00,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    );
+    console.log(data)
+    window.location.assign(data.url)
   }
 
   return (

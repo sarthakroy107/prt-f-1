@@ -71,4 +71,3 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
     </div>
   )
 }
-export default TweetReplies
