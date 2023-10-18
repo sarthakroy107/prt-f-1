@@ -1,28 +1,42 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
+
 import { sidebar_options } from '@/constants/sidebar'
 import { IconType } from 'react-icons'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '@/redux/store'
 import { SidebarAccountDetailsCard } from './acoountDetails/SidebarAccountDetailsCard'
 import { useContext } from 'react'
 import { UserContext } from '@/lib/contextApi/UserContext'
 import Link from 'next/link'
 import Image from 'next/image'
 import CreateTweetModal from '../modals/CreateTweetModal'
+import axios from 'axios'
 
 
 const SidebarLayout = () => {
-    const image = "https://pbs.twimg.com/profile_images/1658306244577472513/up-Oc-FT_400x400.jpg"
-    const pathname = usePathname();
-    console.log(pathname);
+  const image = "https://pbs.twimg.com/profile_images/1658306244577472513/up-Oc-FT_400x400.jpg"
+  const pathname = usePathname();
 
-    const { data: session } = useSession()
-    const dispatch = useDispatch<AppDispatch>();
-    const { tweetModalActive, setTweetModalActive } = useContext(UserContext)
-    console.log(tweetModalActive)
+  const { data: session } = useSession()
+  const { tweetModalActive, setTweetModalActive } = useContext(UserContext)
+
+  const handlePayment = async (e: any) => {
+    e.preventDefault();
+    // console.log("Payment")
+    // const { data } = await axios.post('http://localhost:8000/api/v1/payment',
+    // {
+    //   priceId: 69420.00,
+    // },
+    // {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // }
+    // );
+    // console.log(data)
+    // window.location.assign(data.url)
+  }
 
   return (
     <main className=' h-full flex flex-col justify-between gap-2 py-7 sticky top-7'>
@@ -52,6 +66,9 @@ const SidebarLayout = () => {
         className='w-fit mt-6 p-3 px-20 rounded-full bg-[#1d9bf0ff] cursor-pointer hover:bg-[#0D8BDF] transition-all duration-150'>
           Post
         </div>
+        {/* <button onClick={handlePayment} className='border border-white/40 w-fit p-2'>
+          Payment
+        </button> */}
       </div>
       <div>
         {
@@ -68,4 +85,4 @@ const SidebarLayout = () => {
   )
 }
 
-export default SidebarLayout
+export default SidebarLayout;

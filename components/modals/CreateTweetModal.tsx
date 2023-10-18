@@ -54,6 +54,7 @@ const CreateTweetModal = () => {
   
   const user = useUserContext();
   const { tweetModalActive, setTweetModalActive } = useContext(UserContext)
+  console.log(user)
   
   const [ uploadImages, setUploadImages ] = useState<File[]>([]);
   const fileUploadRef = useRef<HTMLInputElement>(null);
@@ -100,10 +101,11 @@ const CreateTweetModal = () => {
     return () => {
       document.removeEventListener('click', handleOutsideClick);
     };
+
   }, [tweetModalActive]);
    
 
-  if( !user || !user.userDetais) {
+  if(!user) {
     return (
       <div>Loading...</div>
     )
@@ -117,7 +119,7 @@ const CreateTweetModal = () => {
       </div>
       <div className='flex gap-4 w-full'>
         <Image
-          src={user.userDetais.profileImageUrl}
+          src={user.profileImageUrl}
           width={60}
           height={60}
           className='rounded-full h-10 w-[7%] object-cover' 

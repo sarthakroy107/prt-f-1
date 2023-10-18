@@ -1,12 +1,13 @@
 "use client"
+
 import { useState } from 'react'
-import Image from 'next/image'
-import TweetInteractions from '../DetailedTweets/TweetInteractions'
 import { formatTimeAgo } from '@/services/timeFormat'
 import { responseTweetDetailsType } from '@/services/typeDefs'
-import Link from 'next/link'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import Image from 'next/image'
+import Link from 'next/link'
+import TweetInteractions from '../DetailedTweets/TweetInteractions'
 
 type extraUserDetailsType = {
   extraUserDetails: {
@@ -20,16 +21,20 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
   
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [y, setY] = useState<number>(0)
+
   const handleMouseEnter = (e: any) => {
     setY(e.clientY)
     setModalOpen(true)
   }
+
   const handleMouseLeave = (e: any) => {
     setModalOpen(false)
   }
+
   const handleModalHover = () => {
     setModalOpen(true)
   }
+
   const handleModalOut = () => {
     setModalOpen(false)
   }
@@ -52,8 +57,8 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
           <div className='flex gap-x-2 pl-2 relative'>
             {modalOpen && (
             <div onMouseOver={handleModalHover} onMouseOut={handleModalOut} onClick={(e)=>{e.preventDefault()}}
-            className={`bg-black border border-blue-500/50 w-72 p-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-[0.95rem] absolute z-10 ${ y > 150 ? "-top-44" : "top-9"}`}>
-              <AcoountDetailsModal tweet={tweet} y={y} />
+            className={`bg-black border border-blue-500/50 w-72 p-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-[0.95rem] absolute z-10 ${ y > 150 ? "-top-44" : "top-6"}`}>
+              <AcoountDetailsModal tweet={tweet} />
             </div>)}
             <p onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave} className='font-semibold h-3'>{tweet.author_display_name}</p>
             <p className='opacity-80'>@{tweet.author_username}</p>
@@ -86,7 +91,7 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
   )
 }
 
-const AcoountDetailsModal = ({tweet, y}: {tweet: responseTweetDetailsType, y: number}) => {
+const AcoountDetailsModal = ({tweet}: {tweet: responseTweetDetailsType}) => {
 
   const query = gql`
     query Query($username: String!) {
@@ -99,7 +104,7 @@ const AcoountDetailsModal = ({tweet, y}: {tweet: responseTweetDetailsType, y: nu
   `
   const { data }: { data: extraUserDetailsType | undefined | null } =  useSuspenseQuery(query, { variables: { username: tweet.author_username } })
 
-  console.log(data)
+  //console.log(data)
 
   if(data === null || data === undefined) {
     return <div>Loading...</div>
