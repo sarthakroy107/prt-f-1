@@ -14,7 +14,7 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
     const { setUserDetails } = useContext(UserContext);
 
     const cookie = useCookies();
-    //console.log(email)
+    
     const query = gql`
         query Query($email: String!) {
             fetchUserDetailsWithEmail(email: $email) {

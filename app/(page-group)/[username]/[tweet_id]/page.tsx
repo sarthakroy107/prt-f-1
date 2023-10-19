@@ -6,8 +6,9 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2"
 import MainTweetBody from "@/components/DetailedTweets/MainTweetBody"
-import TweetReplies from "@/components/DetailedTweets/TweetReplies"
+
 import { useUserContext } from "@/lib/contextApi/UserContext"
+import TweetReplies from "@/components/DetailedTweets/TweetReplies"
 
 const TweetDetails = () => {
   const params = useParams()

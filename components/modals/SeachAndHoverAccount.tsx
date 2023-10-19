@@ -4,12 +4,18 @@ import Link from "next/link";
 
 type SearchAndHoverAccountProps = {
   details: autocomplete_search_results;
-  bio: boolean;
+  messagePage: boolean;
 };
 
-const SearchAndHoverAccount = ({ details, bio }: SearchAndHoverAccountProps) => {
+const SearchAndHoverAccount = ({ details, messagePage }: SearchAndHoverAccountProps) => {
+  let link;
+  if(messagePage) {
+    link = `/messages/${details.username}`
+  }else {
+    link = `/${details.username}`
+  }
   return (
-    <Link href={`/messages/${details.username}`} className="w-full flex gap-x-4 items-center px-4 hover:bg-slate-50/10 p-3 cursor-pointer">
+    <Link href={link} className="w-full flex gap-x-4 items-center px-4 hover:bg-slate-50/10 p-3 cursor-pointer">
         <Image 
             src={details.profileImageUrl} 
             width={50} 

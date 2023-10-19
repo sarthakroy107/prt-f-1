@@ -4,7 +4,7 @@ import Conversations from "@/components/message-page/Conversations";
 import { autocomplete_search_results, conversationTypeDef } from "@/services/typeDefs";
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { ChangeEvent, use, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { RiMailAddLine } from "react-icons/ri";
 import debounce from "lodash.debounce";
@@ -39,8 +39,7 @@ const page = () => {
   const [searchString, setSearchString] = useState<string>("")
   const [searchAutoResults, setAutoSearchResults] = useState<autocomplete_search_results[] | null>(null)
 
-  const user = useUserContext()
-  console.log(user)
+  const user = useUserContext();
   
   socket.on("autocomplete_profile_search_results", (data: autocomplete_search_results[] | null) => {
     if(data !== null ) setAutoSearchResults(data);
@@ -64,11 +63,7 @@ const page = () => {
   useEffect(() => {
     if(data) {
       //@ts-ignore
-      console.log(data.userChats)
-      //@ts-ignore
       setConversation(data.userChats);
-      //@ts-ignore
-      console.log(data.userChats)
     }
   }, [data])
 
@@ -90,7 +85,7 @@ const page = () => {
                   <div className="w-80 max-h-64 mt-3 bg-black  absolute rounded-xl -left-24 border border-[#1d9bf0]/80 overflow-auto">
                     {
                       searchAutoResults && searchAutoResults.length > 0 ?  searchAutoResults.map((result, index) => (
-                        <SeachAndHoverAccount key={index} details={result} bio={false} />
+                        <SeachAndHoverAccount key={index} details={result} messagePage={true}/>
                       )) : (
                         <div className="w-full h-full flex justify-center items-center py-1">
                           <i className="text-white/75 text-lg">No results found</i>

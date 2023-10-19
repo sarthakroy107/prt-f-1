@@ -43,15 +43,15 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
   `
   const params = useParams();
   console.log(params)
-  const { data }: { data: TweetRepliesType} = useSuspenseQuery(query, {
+  const { data }: { data: TweetRepliesType } = useSuspenseQuery(query, {
     variables: { tweetId: params.tweet_id, offset: 0 },
   })
 
-  useEffect(() => { 
+  useEffect(() => {
     console.log(data.fetchRepliesForSpecifivTweet)
   }, [data])
 
-  if(data === null || data === undefined || data.fetchRepliesForSpecifivTweet === null || data.fetchRepliesForSpecifivTweet === undefined) {
+  if (data === null || data === undefined || data.fetchRepliesForSpecifivTweet === null || data.fetchRepliesForSpecifivTweet === undefined) {
     return <div>Loading...</div>
   }
 
@@ -62,7 +62,7 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
           <>
             {
               reply_arr.map((reply: responseTweetDetailsType, index: number) => (
-                <TweetCard key={ index } tweet={ reply } start={ index === 0 ? true : false} end={index === (reply_arr.length -1) ? true : false } />
+                <TweetCard key={index} tweet={reply} start={index === 0 ? true : false} end={index === (reply_arr.length - 1) ? true : false} />
               ))
             }
           </>
@@ -71,3 +71,4 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
     </div>
   )
 }
+export default TweetReplies

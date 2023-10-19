@@ -17,29 +17,9 @@ import axios from 'axios'
 const SidebarLayout = () => {
   const image = "https://pbs.twimg.com/profile_images/1658306244577472513/up-Oc-FT_400x400.jpg"
   const pathname = usePathname();
-  const user = useUserContext()
-  console.log(user)
 
   const { data: session } = useSession()
   const { tweetModalActive, setTweetModalActive } = useContext(UserContext)
-
-  const handlePayment = async (e: any) => {
-    e.preventDefault();
-    console.log("Payment")
-    const { data } = await axios.post('http://localhost:8000/api/v1/payment',
-    {
-      priceId: 69420.00,
-      username: user.username,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-    );
-    console.log(data)
-    window.location.assign(data.url)
-  }
 
   return (
     <main className=' h-full flex flex-col justify-between gap-2 py-7 sticky top-7'>
@@ -69,9 +49,6 @@ const SidebarLayout = () => {
         className='w-fit mt-6 p-3 px-20 rounded-full bg-[#1d9bf0ff] cursor-pointer hover:bg-[#0D8BDF] transition-all duration-150'>
           Post
         </div>
-        <button onClick={handlePayment} className='border border-white/40 w-fit p-2'>
-          Payment
-        </button>
       </div>
       <div>
         {

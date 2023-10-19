@@ -34,8 +34,6 @@ export type autocomplete_search_results = {
   profileImageUrl: string
   blue: string
   username: string
-  bio?: string
-  following?: boolean
 }
 
 
