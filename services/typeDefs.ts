@@ -58,7 +58,8 @@ export type  responseTweetDetailsType = {
   created_at:           Date     | string;
   updated_at:           Date     | string;
   views_count:          number;
-  is_following:        boolean;
-  is_bookmarked:       boolean;
-  bookmark_count:      number;
+  is_following:         boolean;
+  is_bookmarked:        boolean;
+  bookmark_count:       number;
+  is_blue:              boolean;
 }

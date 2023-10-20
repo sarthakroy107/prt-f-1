@@ -3,7 +3,6 @@
 import TweetCard from "@/components/tweet-card/TweetCard"
 import { gql } from "@apollo/client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
-import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const Tweets = () => {
@@ -23,6 +22,7 @@ const Tweets = () => {
             author_display_name
             author_profile_image
             author_username
+            is_blue
         }
     }
   `

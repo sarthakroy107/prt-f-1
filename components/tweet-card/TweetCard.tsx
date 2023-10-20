@@ -8,6 +8,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import Image from 'next/image'
 import Link from 'next/link'
 import TweetInteractions from '../DetailedTweets/TweetInteractions'
+import { MdVerified } from 'react-icons/md'
 
 type extraUserDetailsType = {
   extraUserDetails: {
@@ -61,6 +62,7 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
               <AcoountDetailsModal tweet={tweet} />
             </div>)}
             <p onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave} className='font-semibold h-3'>{tweet.author_display_name}</p>
+            { tweet.is_blue && (<MdVerified className='mt-1 text-[#3b82f6]'/>)}
             <p className='opacity-80'>@{tweet.author_username}</p>
             &middot;
             <p className='opacity-60'>{formatTimeAgo(tweet.created_at)}</p>
