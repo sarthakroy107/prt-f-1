@@ -125,6 +125,7 @@ const CreateTweetModal = () => {
           className='rounded-full h-10 w-[7%] object-cover' 
           alt='profile image'
         />
+        
         <form className='w-[85%]'>
           <textarea 
             placeholder='What is happening?!' 

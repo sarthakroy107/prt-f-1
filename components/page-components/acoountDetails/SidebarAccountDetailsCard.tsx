@@ -20,13 +20,13 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
             fetchUserDetailsWithEmail(email: $email) {
                 name
                 username
-                profileImageUrl
+                profile_image
                 banner
                 blue
-                tweetCount
+                tweet_count
                 createdAt
-                followersCount
-                followingCount
+                follower_count
+                following_count
             }
         }
     `
@@ -86,7 +86,7 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
             {/* <Link href={'/profile'}> */}
             <div className='w-fit p-2 flex rounded-full items-center gap-3 hover:bg-slate-100/10 transition-all duration-200'>
                 <Image className='rounded-full w-11 h-11 object-cover'
-                    src={data.fetchUserDetailsWithEmail.profileImageUrl}
+                    src={data.fetchUserDetailsWithEmail.profile_image}
                     width={100}
                     height={100}
                     alt='ProfileImage'

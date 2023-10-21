@@ -63,3 +63,19 @@ export type  responseTweetDetailsType = {
   bookmark_count:       number;
   is_blue:              boolean;
 }
+
+export type fullUserDetailssType = {
+  id?:                  string
+  name:                 string
+  email:                string
+  username:             string
+  profile_image:        string
+  banner?:              string
+  createdAt?:           string
+  blue:                 boolean
+  bio?:                 string | null
+  tweet_count?:         number | null
+  reply_count?:         number | null
+  follower_count?:      number | null
+  following_count?:     number | null
+}

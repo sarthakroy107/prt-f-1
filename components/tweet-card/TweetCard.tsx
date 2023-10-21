@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from 'react'
 import { formatTimeAgo } from '@/services/timeFormat'
 import { responseTweetDetailsType } from '@/services/typeDefs'
@@ -9,6 +8,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import TweetInteractions from '../DetailedTweets/TweetInteractions'
 import { MdVerified } from 'react-icons/md'
+import TextContext from './TextContext'
 
 type extraUserDetailsType = {
   extraUserDetails: {
@@ -67,7 +67,9 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
             &middot;
             <p className='opacity-60'>{formatTimeAgo(tweet.created_at)}</p>
           </div>
-          <p className='min-h-6 pl-2'>{tweet.text}</p>
+          {
+            <TextContext text={tweet.text} />
+          }
           {
             tweet.files && tweet.files.length > 0 && (
               <div onClick={(e)=>{e.preventDefault(); console.log("image click")}} className={`grid w-[90%] my-2 gap-2 mb-2 ${tweet.files.length === 1 ? "grid-cols-1" : tweet.files.length === 2 ? "grid-cols-2" : tweet.files.length === 3 ? "grid-cols-2" : "grid-cols-2"}`}>
