@@ -16,13 +16,13 @@ const ProfileDetails = ({email}:{email: string}) => {
     fetchUserDetailsWithEmail(email: $email) {
       name
       username
-      profileImageUrl
+      profile_image
       banner
       blue
-      tweetCount
+      tweet_count
       createdAt
-      followersCount
-      followingCount
+      follower_count
+      following_count
     }
   }
   `
@@ -41,7 +41,7 @@ const ProfileDetails = ({email}:{email: string}) => {
         </div>
         <div className=''>
           <p className='font-semibold'>{data.fetchUserDetailsWithEmail.name}</p>
-          <p className='text-sm opacity-70'>{data.fetchUserDetailsWithEmail.tweetCount} Tweets</p>
+          <p className='text-sm opacity-70'>{data.fetchUserDetailsWithEmail.tweet_count} Tweets</p>
         </div>
       </div>
       <Image 
@@ -53,7 +53,7 @@ const ProfileDetails = ({email}:{email: string}) => {
       />
       <div className='w-full h-24 p-3 px-7 flex justify-between bg-slate-300/5'>
         <Image 
-        src={data.fetchUserDetailsWithEmail.profileImageUrl}
+        src={data.fetchUserDetailsWithEmail.profile_image}
         className='rounded-full w-36 h-36 object-cover relative top-[-4.5rem]'
         height={200}
         width={200}
@@ -80,10 +80,10 @@ const ProfileDetails = ({email}:{email: string}) => {
         </p>
         <div className='flex gap-7 mt-1 pb-1'>
           <div className='flex hover:underline opacity-70 text-white/50'>
-            <p className='font-semibold opacity-100 text-white'>{data.fetchUserDetailsWithEmail.followingCount}</p> &nbsp; following
+            <p className='font-semibold opacity-100 text-white'>{data.fetchUserDetailsWithEmail.following_count}</p> &nbsp; following
           </div>
           <div className='flex hover:underline opacity-70 text-white/50'>
-            <p className='font-semibold opacity-100 text-white'>{data.fetchUserDetailsWithEmail.followersCount}</p> &nbsp; following
+            <p className='font-semibold opacity-100 text-white'>{data.fetchUserDetailsWithEmail.follower_count}</p> &nbsp; following
           </div>
         </div>
       </div>
