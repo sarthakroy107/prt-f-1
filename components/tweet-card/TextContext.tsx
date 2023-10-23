@@ -75,18 +75,18 @@ const UserProfileModal = ({username}: {username: string}) => {
   }
 
   return (
-    <div>
+    <div className="relative">
       <p onMouseOver={handleMouseEnter} onMouseOut={handleMouseLeave} className="text-[#1d9bf0]">@{username}</p>
       {modalOpen && (
         <div onMouseOver={handleModalHover} onMouseOut={handleModalOut} onClick={(e)=>{e.preventDefault()}}
-          className={`bg-black border border-blue-500/50 w-72 p-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-[0.95rem] absolute z-10 ${ y > 150 ? "-top-44" : "top-6"}`}>
+          className={`bg-black border border-blue-500/50 w-72 p-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-[0.95rem] absolute z-10 ${ y > 150 ? "-top-32" : "top-6"}`}>
             <AcoountDetailsModal username={username} />
           </div>)}
     </div>
   )
 }
 
-//! Part-3: Actual modal-------------------------->
+//! Part-3: Actual modal------------------------->
 const AcoountDetailsModal = ({username}: {username: string}) => {
   console.log(username)
 
