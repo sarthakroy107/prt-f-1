@@ -86,7 +86,7 @@ const UserProfileModal = ({username}: {username: string}) => {
   )
 }
 
-//! Part-3: Actual modal------------------------->
+//! Part-3: Actual modal------------------------>
 const AcoountDetailsModal = ({username}: {username: string}) => {
   console.log(username)
 
