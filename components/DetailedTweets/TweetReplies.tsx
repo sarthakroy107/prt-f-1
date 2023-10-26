@@ -5,13 +5,14 @@ import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { useParams } from 'next/navigation'
 import TweetCard from '../tweet-card/TweetCard'
+import CreateTweet from './CreateTweet'
 
 type TweetRepliesType = {
   fetchRepliesForSpecifivTweet: any
 }
 
 const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUsername: string }) => {
-  console.log(tweetId, authorUsername)
+  //console.log(tweetId, authorUsername)
   const query = gql`
       query Query($tweetId: String!, $offset: Int!) {
         fetchRepliesForSpecifivTweet(tweetId: $tweetId, offset: $offset) {
@@ -42,13 +43,13 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
       }
   `
   const params = useParams();
-  console.log(params)
+  //console.log(params)
   const { data }: { data: TweetRepliesType } = useSuspenseQuery(query, {
     variables: { tweetId: params.tweet_id, offset: 0 },
   })
 
   useEffect(() => {
-    console.log(data.fetchRepliesForSpecifivTweet)
+    //console.log(data.fetchRepliesForSpecifivTweet)
   }, [data])
 
   if (data === null || data === undefined || data.fetchRepliesForSpecifivTweet === null || data.fetchRepliesForSpecifivTweet === undefined) {
@@ -57,6 +58,9 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
 
   return (
     <div>
+      <div className='px-5 py-1 border-b border-white/30'>
+        <CreateTweet in_reply={true} in_reply_to={params.tweet_id as string}/>
+      </div>
       {
         data.fetchRepliesForSpecifivTweet.map((reply_arr: responseTweetDetailsType[], index: number) => (
           <>

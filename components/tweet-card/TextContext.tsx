@@ -47,20 +47,20 @@ const UserProfileModal = ({username}: {username: string}) => {
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
 
   const handleMouseEnter = (e: any) => {
-    console.log("handleMouseEnter")
+    //console.log("handleMouseEnter")
     setY(e.clientY)
     setHoverTimeout( setTimeout(() => {
       setModalOpen(true)
-      console.log(modalOpen)
+      //console.log(modalOpen)
     }, 500))
-    console.log(hoverTimeout)
+    //console.log(hoverTimeout)
   }
 
   const handleMouseLeave = (e: any) => {
-    console.log("handleMouseLeave")
-    console.log(hoverTimeout)
+    //console.log("handleMouseLeave")
+    //console.log(hoverTimeout)
     if(hoverTimeout) {
-      console.log("clearTimeout")
+      //console.log("clearTimeout")
       clearTimeout(hoverTimeout)
     }
     setModalOpen(false)
@@ -88,7 +88,7 @@ const UserProfileModal = ({username}: {username: string}) => {
 
 //! Part-3: Actual modal------------------------>
 const AcoountDetailsModal = ({username}: {username: string}) => {
-  console.log(username)
+  //console.log(username)
 
   const query = gql`
     query ExampleQuery($username: String!) {
@@ -111,7 +111,7 @@ const AcoountDetailsModal = ({username}: {username: string}) => {
   `
 
   const { data }: { data: dataType } =  useSuspenseQuery(query, { variables: { username } })
-  console.log(data)
+  //console.log(data)
 
   if(data === null || data === undefined) {
     return <div>Loading...</div>
