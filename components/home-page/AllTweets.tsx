@@ -17,6 +17,7 @@ const Tweets = () => {
             files
             views_count
             retweet_count
+            is_retweeted
             quotetweet_count
             reply_count
             author_display_name

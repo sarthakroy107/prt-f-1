@@ -12,7 +12,6 @@ type TweetRepliesType = {
 }
 
 const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUsername: string }) => {
-  //console.log(tweetId, authorUsername)
   const query = gql`
       query Query($tweetId: String!, $offset: Int!) {
         fetchRepliesForSpecifivTweet(tweetId: $tweetId, offset: $offset) {
@@ -49,7 +48,7 @@ const TweetReplies = ({ tweetId, authorUsername }: { tweetId: string, authorUser
   })
 
   useEffect(() => {
-    //console.log(data.fetchRepliesForSpecifivTweet)
+    
   }, [data])
 
   if (data === null || data === undefined || data.fetchRepliesForSpecifivTweet === null || data.fetchRepliesForSpecifivTweet === undefined) {

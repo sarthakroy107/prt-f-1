@@ -7,7 +7,7 @@ const Page = () => {
     const [option, setOption] = useState("all")
   return (
     <main className="">
-        <section className="w-full border-b border-white/20 sticky top-0">
+        <section className="w-full border-b border-white/20 sticky top-0 z-20">
             <h2 className="font-bold text-xl p-2 px-3 bg-black/80 backdrop-blur-sm">Home</h2>
             <div className="w-full flex">
                 <div className="header-card w-1/2 bg-black/80 backdrop-blur-sm" onClick={()=> setOption("all")}>

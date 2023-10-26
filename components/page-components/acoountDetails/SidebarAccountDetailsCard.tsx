@@ -79,7 +79,7 @@ export const SidebarAccountDetailsCard = ({ email }: { email: string }) => {
             </div>
         )
     }
-    console.log(user)
+    //console.log(user)
 
     return (
         <>
