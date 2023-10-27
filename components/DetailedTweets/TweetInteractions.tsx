@@ -1,5 +1,4 @@
 "use client"
-
 import { responseTweetDetailsType } from "@/services/typeDefs"
 import { gql, useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"

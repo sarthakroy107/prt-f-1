@@ -4,10 +4,10 @@ import { formatTimeAgo } from '@/services/timeFormat'
 import { responseTweetDetailsType } from '@/services/typeDefs'
 import { gql } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { MdVerified } from 'react-icons/md'
 import Image from 'next/image'
 import Link from 'next/link'
 import TweetInteractions from '../DetailedTweets/TweetInteractions'
-import { MdVerified } from 'react-icons/md'
 import TextContext from './TextContext'
 
 type extraUserDetailsType = {
@@ -40,9 +40,10 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
     setModalOpen(false)
   }
 
+  //!href={`/${tweet.author_username}/${tweet._id}`}
 
   return (
-    <Link href={`/${tweet.author_username}/${tweet._id}`} className='hover:bg-white/5 transition-all'>
+    <div className='hover:bg-white/5 transition-all'>
       <div className={`flex w-full `}>
         <div className='flex justify-center w-[12.3%]'> <section className={` h-2 w-1 ${!start ? "bg-[#323739]" : ""}`}></section></div>
         <div className='w-[87.7%]'></div>
@@ -65,7 +66,7 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
             { tweet.is_blue && (<MdVerified className='mt-1 text-[#3b82f6]'/>)}
             <p className='opacity-80'>@{tweet.author_username}</p>
             &middot;
-            <p className='opacity-60'>{formatTimeAgo(tweet.created_at)}</p>
+            <div className='opacity-60'>{formatTimeAgo(tweet.created_at)}</div>
           </div>
           {
             <TextContext text={tweet.text} />
@@ -91,7 +92,7 @@ const TweetCard = ({ tweet, start, end }: {tweet: responseTweetDetailsType, star
           <TweetInteractions tweet={tweet} detailed={false} />
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 

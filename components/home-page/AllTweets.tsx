@@ -6,6 +6,7 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import { useEffect, useState } from "react"
 
 const Tweets = () => {
+  
   const query = gql`
       query Query {
         fetchAllTweets {

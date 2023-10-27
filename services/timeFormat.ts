@@ -15,7 +15,8 @@ export const formatTimeAgo =(timestamp: string | Date): string => {
   else if (timeDifference < 7 * 24 * 60 * 60) {
     const daysOfWeek: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfWeek: string = daysOfWeek[messageTime.getUTCDay()];
-    return `${dayOfWeek} at ${messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    console.log(`${dayOfWeek} at ${messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',  hour12: true })}`);
+    return `${dayOfWeek} at ${messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',  hour12: true })}`;
   } 
   else {
     return messageTime.toLocaleDateString();
