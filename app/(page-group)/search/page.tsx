@@ -48,7 +48,7 @@ const Page = ({ searchParams }: { searchParams: any}) => {
         </div>
         <div onClick={()=>router.push(`/search?q=${searchParams.q}&s=media`)} className=' cursor-pointer'>
           <div>
-            Media
+            Media 
             <div className={`w-full h-[0.20rem] mt-2 rounded-md ${ searchParams.s === "media" ? "bg-blue-500" : ""}`}></div>
           </div>
         </div>
