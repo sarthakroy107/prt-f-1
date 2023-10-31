@@ -52,6 +52,7 @@ const SearchTopTweets = ({query} : {query: string }) => {
     useEffect(()=>{
         if(data !== null) {
             setTweetArr(data.fetchSearchData)
+            console.log(setTweetArr)
         }
     
     }, [data])

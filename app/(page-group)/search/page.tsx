@@ -2,10 +2,10 @@
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import SearchPeople from '@/components/page-components/SearchPeople'
 import Searchbar from '@/components/page-components/Searchbar'
 import SearchTopTweets from '@/components/page-components/SearchTopTweets'
-import { useEffect } from 'react'
 import SearchMediaTweets from '@/components/page-components/SearchMediaTweets'
 import SearchLatestTweets from '@/components/page-components/SearchLatestTweets'
 
