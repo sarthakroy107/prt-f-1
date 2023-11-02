@@ -7,11 +7,10 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { SidebarAccountDetailsCard } from './acoountDetails/SidebarAccountDetailsCard'
 import { useContext } from 'react'
-import { UserContext, useUserContext } from '@/lib/contextApi/UserContext'
+import { UserContext } from '@/lib/contextApi/UserContext'
 import Link from 'next/link'
 import Image from 'next/image'
 import CreateTweetModal from '../modals/CreateTweetModal'
-import axios from 'axios'
 
 
 const SidebarLayout = () => {

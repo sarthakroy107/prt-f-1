@@ -1,5 +1,4 @@
 "use client"
-
 import { fullUserDetailssType } from "@/services/typeDefs";
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
@@ -27,7 +26,7 @@ const TextContext = ({text}: {text: string | null}) => {
         return <span key={index} style={{ color: "green" }}>{part}</span>;
       } else {
 
-        return part;
+        return part
       }
     });
   };
@@ -147,4 +146,5 @@ const AcoountDetailsModal = ({username}: {username: string}) => {
     </>
   )
 }
+
 export default TextContext
