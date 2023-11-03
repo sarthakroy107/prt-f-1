@@ -26,7 +26,7 @@ const TextContext = ({text}: {text: string | null}) => {
         return <span key={index} style={{ color: "green" }}>{part}</span>;
       } else {
 
-        return part
+        return part;
       }
     });
   };
