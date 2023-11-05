@@ -191,6 +191,7 @@ const CreateTweet = ({ in_reply, in_reply_to }: { in_reply: boolean, in_reply_to
                                     className='hidden'
                                 />
                             </div>
+                            
                             <div className="group p-2 rounded-full hover:bg-[#1d9af1]/20 transition-all duration-150 cursor-pointer">
                                 <MdOutlineGifBox className="h-6 w-6 text-[#1d9af1] transition-all duration-150" />
                             </div>
