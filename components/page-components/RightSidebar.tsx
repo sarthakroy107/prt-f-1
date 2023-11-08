@@ -9,7 +9,7 @@ const RightSidebar = () => {
     <div className="w-[30%] flex flex-col items-center">
       { pathname !== "/search" && (
         <div className='w-[90%]'>
-          <Searchbar/>
+          <Searchbar text=''/>
         </div>
       ) }
       <PaymentCard/>

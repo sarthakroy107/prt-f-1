@@ -87,7 +87,7 @@ const CreateTweetModal = () => {
 
   const handleOutsideClick = (event: any) => {
     if (tweetModalActive && !event.target.closest('.tweet-modal')) {
-      setTweetModalActive(false)
+      setTweetModalActive(false);
     }
   };
 
