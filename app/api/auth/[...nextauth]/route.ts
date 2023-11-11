@@ -40,7 +40,6 @@ export const authOptions: NextAuthOptions = {
         name: { label: "Name", type: "text" }
       },
       async authorize(credentials) {
-        console.log("BEFORE USER VERIFICATION")
         console.log(credentials)
 
         if((credentials?.username === null || credentials?.username === undefined) 
@@ -70,7 +69,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
 
-  secret: process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 
   session: {
     strategy: 'jwt',
@@ -85,23 +84,13 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token, user }) {
-      console.log(session);
-      console.log(token)
-      console.log(user)
       session.user.token = token.token;
       session.user.bio = token.bio;
       session.user.profileImageUrl = token.profileImageUrl;
       return session;
     },
 
-    async signIn({user, account, profile, email, credentials}) {
-
-      // console.log("User: ", user);
-      // console.log("Account: ", account);
-      // console.log("Profile", profile);
-      // console.log("Email: ", email);
-      // console.log("Credentials", credentials);
-
+    async signIn({ user, account, profile }) {
 
       if(account?.provider === 'google' || account?.provider === 'github' || account?.provider === 'spotify') {
         const cookie = getCookies();
@@ -132,8 +121,6 @@ export const authOptions: NextAuthOptions = {
     },
     
   },
-
-
 }
 const handler = NextAuth(authOptions)
 
